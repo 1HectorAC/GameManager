@@ -32,7 +32,7 @@ namespace GameManager.Models
 
         public bool Physical { get; set; }
 
-        public bool? Replayed { get; set; }
+        public bool Replayed { get; set; }
 
         public virtual GameSystem GameSystem { get; set; }
 
