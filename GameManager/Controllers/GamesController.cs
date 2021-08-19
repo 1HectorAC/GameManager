@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using GameManager.Models;
+using Microsoft.AspNet.Identity;
 
 namespace GameManager.Controllers
 {
@@ -14,14 +15,26 @@ namespace GameManager.Controllers
     {
         private GameTrackerContext db = new GameTrackerContext();
 
-        // GET: Games
+        /// <summary>
+        /// Get List of games by user in database using GET.
+        /// </summary>
+        /// <returns> A view with a list of games</returns>
+        [Authorize]
         public ActionResult Index()
         {
-            var games = db.Games.Include(g => g.GameSystem).Include(g => g.GameUser);
+            // Get list of game just by the user.
+            var AspNetUserId = User.Identity.GetUserId();
+            var games = db.Games.Where(g => g.GameUser.AspNetUserId == AspNetUserId);
             return View(games.ToList());
         }
 
-        // GET: Games/Details/5
+
+        /// <summary>
+        /// Get details of a Game using GET.
+        /// </summary>
+        /// <param name="id"> The id of a Game object.</param>
+        /// <returns> A view with a passed in Game object.</returns>
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -36,7 +49,11 @@ namespace GameManager.Controllers
             return View(game);
         }
 
-        // GET: Games/Create
+        /// <summary>
+        /// Setup entry for Games using GET.
+        /// </summary>
+        /// <returns> A view.</returns>
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.SystemName = new SelectList(db.GameSystems, "Name", "Name");
@@ -44,9 +61,12 @@ namespace GameManager.Controllers
             return View();
         }
 
-        // POST: Games/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Create entry to Games using POST.
+        /// </summary>
+        /// <param name="game">A game that will replace the another game.</param>
+        /// <returns> A view with a game or redirect to index.</returns>
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,UserId,Title,Price,SystemName,DateOfPurchase,DatePlayed,Borrowed,Physical,Replayed")] Game game)
@@ -63,7 +83,12 @@ namespace GameManager.Controllers
             return View(game);
         }
 
-        // GET: Games/Edit/5
+        /// <summary>
+        /// Setup editing a Game entry using GET.
+        /// </summary>
+        /// <param name="id"> The id of game that will be edited.</param>
+        /// <returns> A view with a game.</returns>
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -80,9 +105,12 @@ namespace GameManager.Controllers
             return View(game);
         }
 
-        // POST: Games/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Edit a game entry using Post.
+        /// </summary>
+        /// <param name="game"> A Game object that will replace a game.</param>
+        /// <returns> A view with a game or redirect to index.</returns>
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,UserId,Title,Price,SystemName,DateOfPurchase,DatePlayed,Borrowed,Physical,Replayed")] Game game)
@@ -98,7 +126,12 @@ namespace GameManager.Controllers
             return View(game);
         }
 
-        // GET: Games/Delete/5
+        /// <summary>
+        /// Setup deleting a game using GET.
+        /// </summary>
+        /// <param name="id">The id of the game that will be deleted</param>
+        /// <returns>A view with a game.</returns>
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -113,7 +146,12 @@ namespace GameManager.Controllers
             return View(game);
         }
 
-        // POST: Games/Delete/5
+        /// <summary>
+        /// Confirm delete a game using POST.
+        /// </summary>
+        /// <param name="id"> The id of the game that will be deleted</param>
+        /// <returns> A redirect to index.</returns>
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
