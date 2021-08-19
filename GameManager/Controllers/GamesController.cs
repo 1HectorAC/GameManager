@@ -37,15 +37,27 @@ namespace GameManager.Controllers
         [Authorize]
         public ActionResult Details(int? id)
         {
+            // Check if id is null. Id can't be null.
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            // Get game based on id and check if it is null
             Game game = db.Games.Find(id);
             if (game == null)
             {
                 return HttpNotFound();
             }
+
+            // Check if current user owns the game entry and redirect if not.
+            var AspNetUserId = User.Identity.GetUserId();
+            var userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
+            if (game.UserId != userId)
+            {
+                return RedirectToAction("Index");
+            }
+
             return View(game);
         }
 
