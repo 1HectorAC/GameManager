@@ -37,7 +37,7 @@ namespace GameManager.Controllers
         [Authorize]
         public ActionResult Details(int? id)
         {
-            // Check if id is null. Id can't be null.
+            // Check if id is null.
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -69,7 +69,6 @@ namespace GameManager.Controllers
         public ActionResult Create()
         {
             ViewBag.SystemName = new SelectList(db.GameSystems, "Name", "Name");
-            ViewBag.UserId = new SelectList(db.GameUsers, "UserId", "AspNetUserId");
             return View();
         }
 
@@ -83,6 +82,11 @@ namespace GameManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,UserId,Title,Price,SystemName,DateOfPurchase,DatePlayed,Borrowed,Physical,Replayed")] Game game)
         {
+            //Set the UserId of game to the current users Id.
+            var AspNetUserId = User.Identity.GetUserId();
+            int userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
+            game.UserId = userId;
+
             if (ModelState.IsValid)
             {
                 db.Games.Add(game);
@@ -91,7 +95,6 @@ namespace GameManager.Controllers
             }
 
             ViewBag.SystemName = new SelectList(db.GameSystems, "Name", "Name", game.SystemName);
-            ViewBag.UserId = new SelectList(db.GameUsers, "UserId", "AspNetUserId", game.UserId);
             return View(game);
         }
 
