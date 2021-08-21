@@ -179,6 +179,15 @@ namespace GameManager.Controllers
             {
                 return HttpNotFound();
             }
+
+            // Check if the current user owns the game (has matching userId).
+            var AspNetUserId = User.Identity.GetUserId();
+            int userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
+            if (userId != game.UserId)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             return View(game);
         }
 
@@ -193,6 +202,15 @@ namespace GameManager.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Game game = db.Games.Find(id);
+
+            // Check if the current user owns the game (has matching userId).
+            var AspNetUserId = User.Identity.GetUserId();
+            int userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
+            if (userId != game.UserId)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             db.Games.Remove(game);
             db.SaveChanges();
             return RedirectToAction("Index");
