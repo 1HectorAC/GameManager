@@ -68,6 +68,7 @@ namespace GameManager.Controllers
         [Authorize]
         public ActionResult Create()
         {
+            // SystemName list for dropdown.
             ViewBag.SystemName = new SelectList(db.GameSystems, "Name", "Name");
             return View();
         }
@@ -94,7 +95,9 @@ namespace GameManager.Controllers
                 return RedirectToAction("Index");
             }
 
+            // SystemName list for dropdown.
             ViewBag.SystemName = new SelectList(db.GameSystems, "Name", "Name", game.SystemName);
+
             return View(game);
         }
 
@@ -111,12 +114,23 @@ namespace GameManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Game game = db.Games.Find(id);
+
             if (game == null)
             {
                 return HttpNotFound();
             }
+
+            // Check if the current user owns the game (has matching userId).
+            var AspNetUserId = User.Identity.GetUserId();
+            int userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
+            if (userId != game.UserId)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            // SystemName list for dropdown.
             ViewBag.SystemName = new SelectList(db.GameSystems, "Name", "Name", game.SystemName);
-            ViewBag.UserId = new SelectList(db.GameUsers, "UserId", "AspNetUserId", game.UserId);
+
             return View(game);
         }
 
@@ -130,14 +144,21 @@ namespace GameManager.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,UserId,Title,Price,SystemName,DateOfPurchase,DatePlayed,Borrowed,Physical,Replayed")] Game game)
         {
+            //Set the UserId of game to the current users Id.
+            var AspNetUserId = User.Identity.GetUserId();
+            int userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
+            game.UserId = userId;
+
             if (ModelState.IsValid)
             {
                 db.Entry(game).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
+            // SystemName list for dropdown.
             ViewBag.SystemName = new SelectList(db.GameSystems, "Name", "Name", game.SystemName);
-            ViewBag.UserId = new SelectList(db.GameUsers, "UserId", "AspNetUserId", game.UserId);
+
             return View(game);
         }
 
