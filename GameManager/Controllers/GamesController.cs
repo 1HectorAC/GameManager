@@ -224,5 +224,45 @@ namespace GameManager.Controllers
             }
             base.Dispose(disposing);
         }
+
+        /// <summary>
+        /// Select the year to analyze gaming habits using GET.
+        /// </summary>
+        /// <returns>A view.</returns>
+        [Authorize]
+        public ActionResult MoneyAnalysis()
+        {
+            // Years list setup for dropdown. Years depend on the when(years) the user has played games.
+            var AspNetUserId = User.Identity.GetUserId();
+            int userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
+            var yearsList = db.Games.Where(g => g.UserId == 1 && g.DateOfPurchase != null).Select(g => new { Year = g.DateOfPurchase.Value.Year }).Distinct();
+            ViewBag.SelectYear = new SelectList(yearsList, "Year", "Year");
+
+            return View();
+        }
+
+
+        /// <summary>
+        /// Display analysis of games of given year using POST.
+        /// </summary>
+        /// <param name="SelectYear"> The year of games to analyze.</param>
+        /// <returns> A view with a list of games.</returns>
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MoneyAnalysis(int SelectYear)
+        {
+            ViewBag.Year = SelectYear;
+            var AspNetUserId = User.Identity.GetUserId();
+            int userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
+
+            // Setup ViewBag of total money spent over selected year.
+            ViewBag.TotalSpent = db.Games.Where(g => g.UserId == userId && g.DateOfPurchase != null && g.DateOfPurchase.Value.Year == SelectYear).Sum(c => c.Price);
+
+            // Get list of games based off selected year.
+            var gamesList = db.Games.Where(g => g.UserId == userId && g.DateOfPurchase != null && g.DateOfPurchase.Value.Year == SelectYear).OrderByDescending(g=>g.DateOfPurchase);
+
+            return View(gamesList);
+        }
     }
 }

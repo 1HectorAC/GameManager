@@ -1,0 +1,85 @@
+﻿@model IEnumerable<GameManager.Models.Game>
+
+@{
+
+    ViewBag.Title = "MoneyAnalysis";
+}
+
+<h2>Money Analysis</h2>
+
+@if (ViewBag.Year == null)
+{
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="SelectYear">Select Year</label>
+            @Html.DropDownList("SelectYear", null, htmlAttributes: new { @class = "form-control" })
+            <span class="field-validation-valid text-danger" data-valmsg-for="SelectYear" data-valmsg-replace="true"></span>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Enter" class="btn btn-default" />
+            </div>
+        </div>
+
+    }
+}
+else
+{
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="" style="text-align:center;">
+                <h3>Total Spent in @ViewBag.Year:</h3>
+                <h1>@ViewBag.TotalSpent$</h1>
+            </div>
+        </div>
+        
+        <div class="col-md-12">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        System Name
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Price)
+                    </th>
+                    <th>
+                        Date Purchased
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Physical)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SystemName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateOfPurchase)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Physical)
+                        </td>
+                    </tr>
+                }
+
+            </table>
+
+        </div>
+    </div>
+}
