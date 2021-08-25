@@ -262,6 +262,17 @@ namespace GameManager.Controllers
             // Get list of games based off selected year.
             var gamesList = db.Games.Where(g => g.UserId == userId && g.DateOfPurchase != null && g.DateOfPurchase.Value.Year == SelectYear).OrderByDescending(g=>g.DateOfPurchase);
 
+            // Get list of cost by month.
+            int[] monthlyCost = {0,0,0,0,0,0,0,0,0,0,0,0};
+            foreach (Game g in gamesList.ToList())
+            {
+                if(g.Price != null)
+                    monthlyCost[g.DateOfPurchase.Value.Month -1] += (int)g.Price;
+            }
+
+            ViewBag.Months = new string[] { "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+            ViewBag.MonthlyCost = monthlyCost;
+
             return View(gamesList);
         }
     }
