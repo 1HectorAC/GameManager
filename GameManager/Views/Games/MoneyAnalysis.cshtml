@@ -5,7 +5,9 @@
     ViewBag.Title = "MoneyAnalysis";
 }
 
-<h2>Money Analysis of @ViewBag.Year</h2>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+
+<h2 style="text-align:center">Money Analysis of @ViewBag.Year</h2>
 
 @if (ViewBag.Year == null)
 {
@@ -29,7 +31,31 @@
 else
 {
     <div class="row">
-        
+
+        <!--Monthly Cost chart.-->
+        <div class="col-md-8">
+            <!--Setup monthly cost related variable(costData) for chart setup in other js file.-->
+            <script style="text/javascript">
+                var costData = new Array();
+                var array = @Html.Raw(Json.Encode(@ViewBag.MonthlyCost));
+                for(var i =0; i<array.length;i++){
+                    costData[i] = array[i];
+                }
+            </script>
+
+            <!--Canvas used to display the chart.-->
+            <canvas id="myChart" width="700" height="250" style="border: 1px solid black;"></canvas>
+        </div>
+
+        <!--Total spent in year.-->
+        <div class="col-md-4">
+            <div class="" style="text-align:center;">
+                <h3>Total Spent in @ViewBag.Year:</h3>
+                <h1>@ViewBag.TotalSpent$</h1>
+            </div>
+        </div>
+
+        <!--Montly spent numbers.-->
         <div class="col-md-6">
             <h3 style="text-align:center">Monthly Spending($)</h3>
             <div class="col-md-6">
@@ -52,13 +78,7 @@ else
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="" style="text-align:center;">
-                <h3>Total Spent in @ViewBag.Year:</h3>
-                <h1>@ViewBag.TotalSpent$</h1>
-            </div>
-        </div>
-        
+        <!--Display game details.-->
         <div class="col-md-12">
             <h3 style="text-align:center">Games Purchased</h3>
             <table class="table">
@@ -107,3 +127,4 @@ else
         </div>
     </div>
 }
+<script src="@Url.Content("~/Scripts/GraphSetup.js")" type="text/javascript"></script>
