@@ -256,18 +256,20 @@ namespace GameManager.Controllers
             var AspNetUserId = User.Identity.GetUserId();
             int userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
 
-            // Setup ViewBag of total money spent over selected year.
-            ViewBag.TotalSpent = db.Games.Where(g => g.UserId == userId && g.DateOfPurchase != null && g.DateOfPurchase.Value.Year == SelectYear).Sum(c => c.Price);
-
             // Get list of games based off selected year.
-            var gamesList = db.Games.Where(g => g.UserId == userId && g.DateOfPurchase != null && g.DateOfPurchase.Value.Year == SelectYear).OrderByDescending(g=>g.DateOfPurchase);
+            var gamesList = db.Games.Where(g => g.UserId == userId && g.DateOfPurchase != null && g.Price != null && g.DateOfPurchase.Value.Year == SelectYear).OrderByDescending(g=>g.DateOfPurchase);
+
+            // Setup ViewBag of total money spent over selected year.
+            ViewBag.TotalSpent = gamesList.Sum(g => g.Price);
+
+            // Setup ViewBag of total games played over selected year.
+            ViewBag.TotalGames = gamesList.Count();
 
             // Get list of cost by month.
             int[] monthlyCost = {0,0,0,0,0,0,0,0,0,0,0,0};
             foreach (Game g in gamesList.ToList())
             {
-                if(g.Price != null)
-                    monthlyCost[g.DateOfPurchase.Value.Month -1] += (int)g.Price;
+                monthlyCost[g.DateOfPurchase.Value.Month -1] += (int)g.Price;
             }
 
             ViewBag.Months = new string[] { "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
