@@ -265,16 +265,19 @@ namespace GameManager.Controllers
             // Setup ViewBag of total games played over selected year.
             ViewBag.TotalGames = gamesList.Count();
 
-            // Get list of cost by month.
-            int[] monthlyCost = {0,0,0,0,0,0,0,0,0,0,0,0};
+            // Get list of cost  and count by month.
+            int[] monthlyCost = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            int[] monthlyCount= { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             foreach (Game g in gamesList.ToList())
             {
                 monthlyCost[g.DateOfPurchase.Value.Month -1] += (int)g.Price;
+                monthlyCount[g.DateOfPurchase.Value.Month - 1] += 1;
             }
+            ViewBag.MonthlyCost = monthlyCost;
+            ViewBag.MonthlyCount = monthlyCount;
 
             ViewBag.Months = new string[] { "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-            ViewBag.MonthlyCost = monthlyCost;
-
+            
             return View(gamesList);
         }
     }
