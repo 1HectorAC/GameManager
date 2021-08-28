@@ -226,7 +226,7 @@ namespace GameManager.Controllers
         }
 
         /// <summary>
-        /// Select the year to analyze gaming habits using GET.
+        /// Select the year to analyze spending habits using GET.
         /// </summary>
         /// <returns>A view.</returns>
         [Authorize]
@@ -235,7 +235,7 @@ namespace GameManager.Controllers
             // Years list setup for dropdown. Years depend on the when(years) the user has played games.
             var AspNetUserId = User.Identity.GetUserId();
             int userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
-            var yearsList = db.Games.Where(g => g.UserId == 1 && g.DateOfPurchase != null).Select(g => new { Year = g.DateOfPurchase.Value.Year }).Distinct();
+            var yearsList = db.Games.Where(g => g.UserId == userId && g.DateOfPurchase != null).Select(g => new { Year = g.DateOfPurchase.Value.Year }).Distinct();
             ViewBag.SelectYear = new SelectList(yearsList, "Year", "Year");
 
             return View();
@@ -243,7 +243,7 @@ namespace GameManager.Controllers
 
 
         /// <summary>
-        /// Display analysis of games of given year using POST.
+        /// Display spending analysis of games using POST.
         /// </summary>
         /// <param name="SelectYear"> The year of games to analyze.</param>
         /// <returns> A view with a list of games.</returns>
@@ -253,11 +253,13 @@ namespace GameManager.Controllers
         public ActionResult MoneyAnalysis(int SelectYear)
         {
             ViewBag.Year = SelectYear;
+            var GamesList = GetUserGamesList(User.Identity.GetUserId());
+
             var AspNetUserId = User.Identity.GetUserId();
             int userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
-
+            
             // Get list of games based off selected year.
-            var gamesList = db.Games.Where(g => g.UserId == userId && g.DateOfPurchase != null && g.Price != null && g.DateOfPurchase.Value.Year == SelectYear).OrderByDescending(g=>g.DateOfPurchase);
+            var gamesList = db.Games.Where(g => g.UserId == userId && g.DateOfPurchase != null && g.Price != null && g.DateOfPurchase.Value.Year == SelectYear).OrderByDescending(g => g.DateOfPurchase);
 
             // Setup ViewBag of total money spent over selected year.
             ViewBag.TotalSpent = gamesList.Sum(g => g.Price);
@@ -267,18 +269,46 @@ namespace GameManager.Controllers
 
             // Get list of cost  and count by month.
             int[] monthlyCost = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-            int[] monthlyCount= { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            int[] monthlyCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             foreach (Game g in gamesList.ToList())
             {
-                monthlyCost[g.DateOfPurchase.Value.Month -1] += (int)g.Price;
+                monthlyCost[g.DateOfPurchase.Value.Month - 1] += (int)g.Price;
                 monthlyCount[g.DateOfPurchase.Value.Month - 1] += 1;
             }
             ViewBag.MonthlyCost = monthlyCost;
             ViewBag.MonthlyCount = monthlyCount;
 
-            ViewBag.Months = new string[] { "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-            
+            ViewBag.Months = new string[] { "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+
             return View(gamesList);
         }
+
+        /// <summary>
+        /// Select the year to analyze gaming habits using GET.
+        /// </summary>
+        /// <returns>A view.</returns>
+        [Authorize]
+        public ActionResult TypeAnalysis()
+        {
+            // Years list setup for dropdown. Years depend on the when(years) the user has played games.
+            var gamesList = GetUserGamesList(User.Identity.GetUserId());
+            var yearsList = gamesList.Where(g => g.DatePlayed != null).Select(g => new { Year = g.DatePlayed.Value.Year }).Distinct();
+            ViewBag.SelectYear = new SelectList(yearsList, "Year", "Year");
+
+            return View();
+        }
+
+
+        /// <summary>
+        /// Function used to get a users games list.
+        /// </summary>
+        /// <param name="AspNetUserId">An id connected to a user. </param>
+        /// <returns>A list of games.</returns>
+        private IQueryable<Game> GetUserGamesList(string AspNetUserId)
+        {
+            int userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
+            return db.Games.Where(g => g.UserId == userId);
+        }
+        
     }
 }

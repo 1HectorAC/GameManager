@@ -252,6 +252,7 @@
     <Content Include="Views\Games\Edit.cshtml" />
     <Content Include="Views\Games\Index.cshtml" />
     <Content Include="Views\Games\MoneyAnalysis.cshtml" />
+    <Content Include="Views\Games\TypeAnalysis.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
