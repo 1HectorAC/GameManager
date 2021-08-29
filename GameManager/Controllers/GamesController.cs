@@ -295,16 +295,74 @@ namespace GameManager.Controllers
             var yearsList = gamesList.Where(g => g.DatePlayed != null).Select(g => new { Year = g.DatePlayed.Value.Year }).Distinct();
             ViewBag.SelectYear = new SelectList(yearsList, "Year", "Year");
 
+            // SystemName list for dropdown.
+            ViewBag.SystemName = new SelectList(db.GameSystems, "Name", "Name");
+
             return View();
         }
 
-
         /// <summary>
-        /// Function used to get a users games list.
+        /// Display type analysis of games using POST.
         /// </summary>
-        /// <param name="AspNetUserId">An id connected to a user. </param>
-        /// <returns>A list of games.</returns>
-        private IQueryable<Game> GetUserGamesList(string AspNetUserId)
+        /// <param name="SelectYear"> The year of games to analyze.</param>
+        /// <returns> A view with a list of games.</returns>
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult TypeAnalysis(int SelectYear,int Type, String Console1, String Console2)
+        {
+            ViewBag.Year = SelectYear;
+
+            // Set the title of the 2 Types
+            string[,] types = new string[,] { 
+                {"Physical", "Digital" }, 
+                {"Borrowed","Owned"}, 
+                {"Replayed","First Played"}, 
+                {Console1, Console2}
+            };
+            ViewBag.Title1 = types[Type-1, 0];
+            ViewBag.Title2 = types[Type-1, 1];
+
+            var gamesList = GetUserGamesList(User.Identity.GetUserId());
+            // Get list of games based off selected year.
+            gamesList = gamesList.Where(g=>g.DatePlayed != null && g.DatePlayed.Value.Year == SelectYear).OrderByDescending(g => g.DatePlayed);
+
+            // Get the count of both sides of the type.
+            var count1 = 0;
+            var count2 = gamesList.Count();
+            if(Type == 1)
+            {
+                count1 = gamesList.Where(g => g.Physical == true).Count();
+                count2 -= count1;
+            }
+                 
+            else if(Type == 2)
+            {
+                count1 = gamesList.Where(g => g.Borrowed == true).Count();
+                count2 -= count1;
+            }
+            else if (Type == 3)
+            {
+                count1 = gamesList.Where(g => g.Replayed == true).Count();
+                count2 -= count1;
+            }
+            else
+            {
+                count1 = gamesList.Where(g => g.SystemName == Console1).Count();
+                count2 = gamesList.Where(g => g.SystemName == Console2).Count();
+            }
+            ViewBag.Count1 = count1;
+            ViewBag.Count2 = count2;
+
+            return View();
+        }
+
+            /// <summary>
+            /// Function used to get a users games list.
+            /// </summary>
+            /// <param name="AspNetUserId">An id connected to a user. </param>
+            /// <returns>A list of games.</returns>
+            private IQueryable<Game> GetUserGamesList(string AspNetUserId)
         {
             int userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
             return db.Games.Where(g => g.UserId == userId);
