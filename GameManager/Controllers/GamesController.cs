@@ -268,8 +268,8 @@ namespace GameManager.Controllers
             ViewBag.TotalGames = gamesList.Count();
 
             // Get list of cost  and count by month.
-            int[] monthlyCost = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-            int[] monthlyCount = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            int[] monthlyCost = new int[12];
+            int[] monthlyCount = new int[12];
             foreach (Game g in gamesList.ToList())
             {
                 monthlyCost[g.DateOfPurchase.Value.Month - 1] += (int)g.Price;
@@ -309,50 +309,29 @@ namespace GameManager.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult TypeAnalysis(int SelectYear,int Type, String Console1, String Console2)
+        public ActionResult TypeAnalysis(int SelectYear)
         {
             ViewBag.Year = SelectYear;
 
-            // Set the title of the 2 Types
-            string[,] types = new string[,] { 
-                {"Physical", "Digital" }, 
-                {"Borrowed","Owned"}, 
-                {"Replayed","First Played"}, 
-                {Console1, Console2}
-            };
-            ViewBag.Title1 = types[Type-1, 0];
-            ViewBag.Title2 = types[Type-1, 1];
-
-            var gamesList = GetUserGamesList(User.Identity.GetUserId());
             // Get list of games based off selected year.
+            var gamesList = GetUserGamesList(User.Identity.GetUserId());
             gamesList = gamesList.Where(g=>g.DatePlayed != null && g.DatePlayed.Value.Year == SelectYear).OrderByDescending(g => g.DatePlayed);
 
-            // Get the count of both sides of the type.
-            var count1 = 0;
-            var count2 = gamesList.Count();
-            if(Type == 1)
+            // Get count data of Borrowed, Replayed, Physical, and Digital.
+            ViewBag.Borrowed = gamesList.Where(g => g.Borrowed == true).Count();
+            ViewBag.Replayed = gamesList.Where(g => g.Replayed == true).Count();
+            ViewBag.Physical = gamesList.Where(g => g.Physical == true).Count();
+            ViewBag.Digital = gamesList.Where(g => g.Physical != true).Count();
+
+            // Get GameSystem count and names arrays.
+            var systemNames = gamesList.Select(g=>g.SystemName).Distinct().ToArray();
+            int[] systemCounts = new int[systemNames.Length];
+            foreach(string x in gamesList.Select(g => g.SystemName))
             {
-                count1 = gamesList.Where(g => g.Physical == true).Count();
-                count2 -= count1;
+                systemCounts[Array.FindIndex(systemNames,g => g == x) ] += 1;
             }
-                 
-            else if(Type == 2)
-            {
-                count1 = gamesList.Where(g => g.Borrowed == true).Count();
-                count2 -= count1;
-            }
-            else if (Type == 3)
-            {
-                count1 = gamesList.Where(g => g.Replayed == true).Count();
-                count2 -= count1;
-            }
-            else
-            {
-                count1 = gamesList.Where(g => g.SystemName == Console1).Count();
-                count2 = gamesList.Where(g => g.SystemName == Console2).Count();
-            }
-            ViewBag.Count1 = count1;
-            ViewBag.Count2 = count2;
+            ViewBag.SystemNames = systemNames;
+            ViewBag.SystemCounts = systemCounts;
 
             return View();
         }

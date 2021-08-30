@@ -20,28 +20,6 @@
         </div>
 
         <div class="form-group">
-            <p>Please select a Type:</p>
-            <input type="radio" id="type1" name="Type" value="1" checked="checked">
-            <label for="type1">physical v. digital</label><br>
-            <input type="radio" id="type2" name="Type" value="2">
-            <label for="type2">Borrowed v. owned</label><br>
-            <input type="radio" id="type3" name="Type" value="3">
-            <label for="type3">Replayed v. First Play</label><br />
-            <input type="radio" id="type4" name="Type" value="4">
-            <label for="type4">2 Game System</label>
-            <div>
-                <label class="control-label" for="Console1" hidden>Console1</label>
-                @Html.DropDownList("Console1", (SelectList)ViewBag.SystemName, htmlAttributes: new { @class = "form-control", @style = "width: 100px; display:inline-block;margin-left:30px" })
-                <p style="display:inline-block">v.</p>
-                <label class="control-label" for="Console2" hidden>Console2</label>
-                @Html.DropDownList("Console2", (SelectList)ViewBag.SystemName, htmlAttributes: new { @class = "form-control", @style = "width: 100px; display:inline-block" })
-
-                <span class="field-validation-valid text-danger" data-valmsg-for="Console1" data-valmsg-replace="true"></span>
-                <span class="field-validation-valid text-danger" data-valmsg-for="Console2" data-valmsg-replace="true"></span>
-            </div>
-        </div>
-
-        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Enter" class="btn btn-default" />
             </div>
@@ -50,17 +28,47 @@
 }
 else
 {
-        <h2 style="text-align:center">@ViewBag.Year TypeAnalysis (@ViewBag.Title1 v. @ViewBag.Title2) </h2>
+    <h2 style="text-align:center">@ViewBag.Year TypeAnalysis</h2>
     <div class="row">
         <div class="col-md-4">
             <div style="text-align:center;">
-                <h3>Total @ViewBag.Title1:</h3>
-                <h1>@ViewBag.Count1</h1>
+                <h3>Total Borrowed:</h3>
+                <h1>@ViewBag.Borrowed</h1>
             </div>
+        </div>
+
+        <div class="col-md-4">
             <div style="text-align:center;">
-                <h3>Total @ViewBag.Title2:</h3>
-                <h1>@ViewBag.Count2</h1>
+                <h3>Total Replayed:</h3>
+                <h1>@ViewBag.Replayed</h1>
             </div>
+        </div>
+
+        <div class="col-md-4">
+            <h3 style="text-align:center">Console Count:</h3>
+            <dl class="dl-horizontal">
+                @for (int i = 0; i < ViewBag.SystemNames.Length; i++)
+                {
+                    <dt> @ViewBag.SystemNames[i] </dt>
+                    <dd> @ViewBag.SystemCounts[i] </dd>
+                }
+            </dl>
+        </div>
+
+        <div class="col-md-8">
+            <div class="col-md-6">
+                <div style="text-align:center;">
+                    <h3>Physical:</h3>
+                    <h1>@ViewBag.Physical</h1>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div style="text-align:center;">
+                    <h3>Digital:</h3>
+                    <h1>@ViewBag.Digital</h1>
+                </div>
+            </div>
+
         </div>
     </div>
 
