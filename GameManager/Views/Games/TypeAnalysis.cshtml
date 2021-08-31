@@ -5,6 +5,9 @@
     ViewBag.Title = "TypeAnalysis";
 }
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+
+
 
 @if (ViewBag.Year == null)
 {
@@ -30,48 +33,60 @@ else
 {
     <h2 style="text-align:center">@ViewBag.Year TypeAnalysis</h2>
     <div class="row">
-        <div class="col-md-4">
-            <div style="text-align:center;">
-                <h3>Total Borrowed:</h3>
-                <h1>@ViewBag.Borrowed</h1>
-            </div>
-        </div>
 
-        <div class="col-md-4">
-            <div style="text-align:center;">
-                <h3>Total Replayed:</h3>
-                <h1>@ViewBag.Replayed</h1>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <h3 style="text-align:center">Console Count:</h3>
-            <dl class="dl-horizontal">
-                @for (int i = 0; i < ViewBag.SystemNames.Length; i++)
-                {
-                    <dt> @ViewBag.SystemNames[i] </dt>
-                    <dd> @ViewBag.SystemCounts[i] </dd>
+        <!--Game Console pie chart.-->
+        <div class="col-md-6">
+            <!--Setup system name and data for chart.-->
+            <script>
+                var systemData = new Array();
+                var systemNames = new Array();
+                var array = @Html.Raw(Json.Encode(@ViewBag.SystemCounts));
+                var array2 = @Html.Raw(Json.Encode(@ViewBag.SystemNames));
+                for(var i =0; i<array.length;i++){
+                    systemData[i] = array[i];
+                    systemNames[i] = array2[i];
                 }
-            </dl>
-        </div>
 
-        <div class="col-md-8">
+            </script>
+
+            <!--Canvas used to display the chart.-->
+            <canvas id="myChart" height="350" style="width:100%;max-width:600px;"></canvas>
+        </div>
+        <div class="col-md-6">
+            
             <div class="col-md-6">
                 <div style="text-align:center;">
-                    <h3>Physical:</h3>
+                    <h3>Total Borrowed:</h3>
+                    <h1>@ViewBag.Borrowed</h1>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div style="text-align:center;">
+                    <h3>Total Replayed:</h3>
+                    <h1>@ViewBag.Replayed</h1>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div style="text-align:center;">
+                    <h3>Physical Copy:</h3>
                     <h1>@ViewBag.Physical</h1>
                 </div>
             </div>
             <div class="col-md-6">
                 <div style="text-align:center;">
-                    <h3>Digital:</h3>
+                    <h3>Digital Copy:</h3>
                     <h1>@ViewBag.Digital</h1>
                 </div>
             </div>
-
         </div>
     </div>
 
 }
+
+<script src="@Url.Content("~/Scripts/GraphSetup.js")" type="text/javascript"></script>
+<script>
+    PieGraphSetup( "Game Console Count", systemNames, systemData);
+</script>
 
 
