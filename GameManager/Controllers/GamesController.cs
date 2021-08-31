@@ -317,6 +317,8 @@ namespace GameManager.Controllers
             var gamesList = GetUserGamesList(User.Identity.GetUserId());
             gamesList = gamesList.Where(g=>g.DatePlayed != null && g.DatePlayed.Value.Year == SelectYear).OrderByDescending(g => g.DatePlayed);
 
+            ViewBag.Count = gamesList.Count();
+
             // Get count data of Borrowed, Replayed, Physical, and Digital.
             ViewBag.Borrowed = gamesList.Where(g => g.Borrowed == true).Count();
             ViewBag.Replayed = gamesList.Where(g => g.Replayed == true).Count();
