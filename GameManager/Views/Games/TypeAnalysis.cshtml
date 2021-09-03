@@ -52,6 +52,8 @@ else
             <!--Canvas used to display the chart.-->
             <canvas id="myChart" height="350" style="width:100%;max-width:600px;"></canvas>
         </div>
+
+        <!--Data display-->
         <div class="col-md-6">
             <div class="col-md-12">
                 <div style="text-align:center;">
@@ -85,13 +87,86 @@ else
                 </div>
             </div>
         </div>
+
+        <!--Game list display.-->
+        <div class="col-md-12">
+            <div class="panel panel-default" style="margin-top:10px;">
+                <div class="panel-heading" style="text-align:center;line-height:.8">
+                    <h3 style="margin:0px;">Games List</h3>
+                </div>
+
+                <div class="panel-body">
+
+                    <!--Input type search.-->
+                    <div class="col-md-4 col-lg-offset-4" id="searchType">
+                        <form name="type_Form" id="type_Form" action="">
+                            <h4>Search the games of a specific type:</h4>
+                            <div class="form-group">
+                                <input data-val="true" id="Year" name="Year" type="hidden" value=@ViewBag.Year />
+
+                                <input type="radio" id="type1" name="Type" value="1" checked="checked">
+                                <label for="type1">Borrowed</label><br>
+
+                                <input type="radio" id="type2" name="Type" value="2">
+                                <label for="type2">Replayed</label><br>
+
+                                <input type="radio" id="type3" name="Type" value="3">
+                                <label for="type3">Physical</label><br />
+
+                                <input type="radio" id="type4" name="Type" value="4">
+                                <label for="type4">Digital</label><br />
+
+                                <input type="radio" id="type5" name="Type" value="5">
+
+                                <label for="type5">Game System</label>
+
+
+                                <label class="control-label" for="SelectSystemName" hidden>Select System</label>
+                                @Html.DropDownList("SelectSystemName", null, htmlAttributes: new { @class = "form-control", @style = "width: 100px; display:inline-block" })
+                                <span class="field-validation-valid text-danger" data-valmsg-for="SelectSystemName" data-valmsg-replace="true"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Enter" class="btn btn-default" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Type table setup. -->
+                    <div class="" id="typeTable" hidden>
+                        <h3 id="tableTitle" style="text-align:center"></h3>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Date Played</th>
+                                    <th>Console</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="displayType"></tbody>
+                        </table>
+
+                        <!--Button to reset type search. -->
+                        <input id="resetSearch" class="btn btn-default" type="button" value="New  Type Search" onclick="ShowInput();" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
 
+    <script src="@Url.Content("~/Scripts/GraphSetup.js")" type="text/javascript"></script>
+    <script>
+        PieGraphSetup("Game Console Count", systemNames, systemData);
+    </script>
 }
 
-<script src="@Url.Content("~/Scripts/GraphSetup.js")" type="text/javascript"></script>
-<script>
-    PieGraphSetup( "Game Console Count", systemNames, systemData);
-</script>
 
+
+@section PageScripts{
+    <script type="text/javascript" src="~/Scripts/GamesType.js"></script>
+}
 

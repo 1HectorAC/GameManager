@@ -335,7 +335,64 @@ namespace GameManager.Controllers
             ViewBag.SystemNames = systemNames;
             ViewBag.SystemCounts = systemCounts;
 
+            // Make selection list for systems currently played for a drop down
+            ViewBag.SelectSystemName = new SelectList(gamesList.Select(g => g.SystemName).Distinct());
+
             return View();
+        }
+
+        /// <summary>
+        /// Get Some Game variables for a specific type of games.
+        /// </summary>
+        /// <param name="Year"> Only games of the given year will be returned.</param>
+        /// <param name="Type"> The type of games to filter. </param>
+        /// <param name="SelectSystemName"> The systemName that will be filted if needed.</param>
+        /// <returns> A JsonResult with games data. </returns>
+        [Authorize]
+        [HttpPost]
+        public JsonResult GameTypeList(int Year, int Type, string SelectSystemName)
+        {
+            // Get list of games based off selected year.
+            var gamesList = GetUserGamesList(User.Identity.GetUserId());
+            gamesList = gamesList.Where(g => g.DatePlayed != null && g.DatePlayed.Value.Year == Year).OrderByDescending(g => g.DatePlayed);
+
+            var title = "";
+
+            // Filter gamesList based on selected type.
+            if (Type == 1)
+            {
+                title = "Borrowed";
+                gamesList = gamesList.Where(g => g.Borrowed == true);
+            }
+            if (Type == 2)
+            {
+                title = "Replayed";
+                gamesList = gamesList.Where(g => g.Replayed == true);
+            }
+            if (Type == 3)
+            {
+                title = "Physical Copy";
+                gamesList = gamesList.Where(g => g.Physical == true);
+            }
+            if (Type == 4)
+            {
+                title = "Digital Copy";
+                gamesList = gamesList.Where(g => g.Physical != true);
+            }
+            if (Type == 5)
+            {
+                title = "Console(" + SelectSystemName + ")";
+                gamesList = gamesList.Where(g => g.SystemName == SelectSystemName);
+            }
+
+            var data = new {
+                Title = title,
+                TitleList = gamesList.Select(g => g.Title).ToArray(),
+                DateList = gamesList.AsEnumerable().Select(g => g.DatePlayed.Value.ToString("MM/dd/yy")).ToArray(),
+                SystemList = gamesList.Select(g => g.SystemName).ToArray()
+            };
+            
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
             /// <summary>
