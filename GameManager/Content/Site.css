@@ -32,3 +32,14 @@ textarea {
     background-color: #11998e;
     color:white;
 }
+
+/*Navbar link*/
+.nav li a {
+    color: #11998e;
+    font-size:15px;
+}
+/*Navbar header link*/
+.navbar-header a {
+    color: #11998e;
+    font-size: 20px;
+}
