@@ -233,10 +233,9 @@ namespace GameManager.Controllers
         public ActionResult MoneyAnalysis()
         {
             // Years list setup for dropdown. Years depend on the when(years) the user has played games.
-            var AspNetUserId = User.Identity.GetUserId();
-            int userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
-            var yearsList = db.Games.Where(g => g.UserId == userId && g.DateOfPurchase != null).Select(g => new { Year = g.DateOfPurchase.Value.Year }).Distinct();
-            ViewBag.SelectYear = new SelectList(yearsList, "Year", "Year");
+            var gamesList = GetUserGamesList(User.Identity.GetUserId());
+            var yearsList = gamesList.Where(g => g.DateOfPurchase != null).Select(g => g.DateOfPurchase.Value.Year ).Distinct();
+            ViewBag.SelectYear = new SelectList(yearsList);
 
             return View();
         }
@@ -253,34 +252,45 @@ namespace GameManager.Controllers
         public ActionResult MoneyAnalysis(int SelectYear)
         {
             ViewBag.Year = SelectYear;
-            var GamesList = GetUserGamesList(User.Identity.GetUserId());
-
-            var AspNetUserId = User.Identity.GetUserId();
-            int userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
-            
+            var gamesList = GetUserGamesList(User.Identity.GetUserId());
+          
             // Get list of games based off selected year.
-            var gamesList = db.Games.Where(g => g.UserId == userId && g.DateOfPurchase != null && g.Price != null && g.DateOfPurchase.Value.Year == SelectYear).OrderByDescending(g => g.DateOfPurchase);
+            var gamesListOfYear = gamesList.Where(g => g.DateOfPurchase != null && g.Price != null && g.DateOfPurchase.Value.Year == SelectYear).OrderByDescending(g => g.DateOfPurchase);
 
             // Setup ViewBag of total money spent over selected year.
-            ViewBag.TotalSpent = gamesList.Sum(g => g.Price);
+            ViewBag.TotalSpent = gamesListOfYear.Sum(g => g.Price);
 
             // Setup ViewBag of total games played over selected year.
-            ViewBag.TotalGames = gamesList.Count();
-
-            // Get list of cost  and count by month.
+            ViewBag.TotalGames = gamesListOfYear.Count();
+            
             int[] monthlyCost = new int[12];
             int[] monthlyCount = new int[12];
-            foreach (Game g in gamesList.ToList())
+            int[] priceRange = new int[10];
+            int index = 0;
+            // Setup values for montlyCost, montlyCount, and priceRange
+            foreach (Game g in gamesListOfYear.ToList())
             {
                 monthlyCost[g.DateOfPurchase.Value.Month - 1] += (int)g.Price;
                 monthlyCount[g.DateOfPurchase.Value.Month - 1] += 1;
+                
+                decimal gameCost = g.Price.Value;
+                if (gameCost < 20)
+                    priceRange[0]++;
+                else if (gameCost >= 100)
+                    priceRange[9]++;
+                else
+                    priceRange[(int)Math.Floor(gameCost/10)-1]++;
+                index++;
             }
             ViewBag.MonthlyCost = monthlyCost;
             ViewBag.MonthlyCount = monthlyCount;
+            ViewBag.PriceRange = priceRange;
+
 
             ViewBag.Months = new string[] { "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+            ViewBag.PriceLabels = new string[] { "<$20", "$20-$29", "$30-$39", "$40-$49", "$50-$59", "$60-$69", "$70-$79", "$80-$89", "$90-$99", ">$100" };
 
-            return View(gamesList);
+            return View(gamesListOfYear);
         }
 
         /// <summary>
