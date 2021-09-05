@@ -33,6 +33,11 @@ textarea {
     color:white;
 }
 
+.customButton2 {
+    background-color: white;
+    color: #11998e;
+}
+
 /*Navbar link*/
 .nav li a {
     color: #11998e;
@@ -42,4 +47,16 @@ textarea {
 .navbar-header a {
     color: #11998e;
     font-size: 20px;
+}
+
+.whiteText {
+    color: white;
+    text-shadow: 1px 1px 5px #000000;
+}
+
+.whiteCard {
+    background-color: #f7f7f7;
+    color: black;
+    box-shadow: 5px 10px 8px #206750;
+    border-radius: 8px;
 }
