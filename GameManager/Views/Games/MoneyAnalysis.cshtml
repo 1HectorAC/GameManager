@@ -13,37 +13,38 @@
     using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-<div class="row">
-    <div class="col-md-6 col-md-offset-3 whiteCard text-center" style="padding: 10px; margin-top:10px">
-        <h2>Money Analysis</h2>
-        <hr class="greenLine"/>
-        <p>Select a year to analyze.</p>
-        <div class="form-group">
-            <label class="control-label col-md-3 col-md-offset-1" for="SelectYear">Select Year</label>
-            <div class="col-md-6">
-                @Html.DropDownList("SelectYear", null, htmlAttributes: new { @class = "form-control" })
-                <span class="field-validation-valid text-danger" data-valmsg-for="SelectYear" data-valmsg-replace="true"></span>
-            </div>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 whiteCard text-center" style="padding: 10px; margin-top:10px">
+                <h2>Money Analysis</h2>
+                <hr class="greenLine" />
+                <p>Select a year to analyze.</p>
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-md-offset-1" for="SelectYear">Select Year</label>
+                    <div class="col-md-6">
+                        @Html.DropDownList("SelectYear", null, htmlAttributes: new { @class = "form-control" })
+                        <span class="field-validation-valid text-danger" data-valmsg-for="SelectYear" data-valmsg-replace="true"></span>
+                    </div>
 
-        </div>
+                </div>
 
-        <div class="form-group">
-            <div class=" col-md-12">
-                <br />
-                <input type="submit" value="Enter" class="btn customButton" />
+                <div class="form-group">
+                    <div class=" col-md-12">
+                        <br />
+                        <input type="submit" value="Enter" class="btn customButton" />
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <p>Note: If you don't have any purchased games in your games List then you won't see any years to select. Go to games list @Html.ActionLink("here.", "Index", "Games")</p>
+                </div>
+
             </div>
         </div>
-        <div class="col-md-12">
-            <p>Note: If you don't have any purchased games in your games List then you won't see any years to select. Go to games list @Html.ActionLink("here.", "Index", "Games")</p>
-        </div>
-        
-    </div>
-</div>
     }
 }
 else
 {
-    <h2 style="text-align:center">@ViewBag.Year Money Analysis</h2>
+    <h2 class="whiteText" style="text-align:center">@ViewBag.Year Money Analysis</h2>
+    <hr class="whiteLine" style="margin-bottom:10px" />
     <div class="row">
 
         <!--Monthly Cost chart.-->
@@ -56,114 +57,120 @@ else
                     costData[i] = array[i];
                 }
             </script>
+            <div class="whiteCard">
+                <!--Canvas used to display the chart.-->
+                <canvas id="myChart" width="700" height="250" style="padding:10px"></canvas>
+            </div>
 
-            <!--Canvas used to display the chart.-->
-            <canvas id="myChart" width="700" height="250" style="border: 1px solid black;"></canvas>
         </div>
 
         <!--Total spent in year and total games played.-->
         <div class="col-md-4">
-            <div class="" style="text-align:center;">
+            <div class="whiteCard text-center" style="padding:10px">
                 <h3>Total Spent in @ViewBag.Year:</h3>
                 <h1>@ViewBag.TotalSpent$</h1>
-            </div>
-            <div class="" style="text-align:center;">
+
                 <h3>Total Games Played in @ViewBag.Year:</h3>
                 <h1>@ViewBag.TotalGames</h1>
+
             </div>
         </div>
 
         <!--Monthly spent numbers.-->
         <div class="col-md-6">
-            <h3 style="text-align:center">Monthly Count & Spending($)</h3>
-            <div class="col-md-6">
-                <dl class="dl-horizontal">
-                    @for (int i = 0; i < 6; i++)
-                    {
-                        <dt>@ViewBag.Months[i]</dt>
-                        <dd>@ViewBag.MonthlyCount[i] ($@ViewBag.MonthlyCost[i])</dd>
-                    }
-                </dl>
-            </div>
-            <div class="col-md-6">
-                <dl class="dl-horizontal">
-                    @for (int i = 6; i < 12; i++)
-                    {
-                        <dt>@ViewBag.Months[i]</dt>
-                        <dd>@ViewBag.MonthlyCount[i] ($@ViewBag.MonthlyCost[i])</dd>
-                    }
-                </dl>
+            <div class="whiteCard text-center" style="padding:10px; margin-top:15px">
+                <h3>Monthly Count & Spending($)</h3>
+                <div class="col-md-6">
+                    <dl class="dl-horizontal">
+                        @for (int i = 0; i < 6; i++)
+                        {
+                            <dt>@ViewBag.Months[i]</dt>
+                            <dd>@ViewBag.MonthlyCount[i] ($@ViewBag.MonthlyCost[i])</dd>
+                        }
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <dl class="dl-horizontal">
+                        @for (int i = 6; i < 12; i++)
+                        {
+                            <dt>@ViewBag.Months[i]</dt>
+                            <dd>@ViewBag.MonthlyCount[i] ($@ViewBag.MonthlyCost[i])</dd>
+                        }
+                    </dl>
+                </div>
+                <p style="color:#f7f7f7; margin:0px; padding:0px">a</p>
             </div>
         </div>
 
         <!--Monthly count.-->
         <div class="col-md-6">
-            <h3 style="text-align:center">Price Range Analysis</h3>
-            <div class="col-md-6">
-                <dl class="dl-horizontal">
-                    @for (int i = 0; i < 5; i++)
-                    {
-                        <dt>@ViewBag.PriceLabels[i]</dt>
-                        <dd>@ViewBag.PriceRange[i]</dd>
-                    }
-                </dl>
-            </div>
-            <div class="col-md-6">
-                <dl class="dl-horizontal">
-                    @for (int i = 5; i < 10; i++)
-                    {
-                        <dt>@ViewBag.PriceLabels[i]</dt>
-                        <dd>@ViewBag.PriceRange[i]</dd>
-                    }
-                </dl>
+            <div class="whiteCard text-center" style="padding:10px; margin-top:15px">
+                <h3>Price Range Analysis</h3>
+                <div class="col-md-6">
+                    <dl class="dl-horizontal">
+                        @for (int i = 0; i < 5; i++)
+                        {
+                            <dt>@ViewBag.PriceLabels[i]</dt>
+                            <dd>@ViewBag.PriceRange[i]</dd>
+                        }
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <dl class="dl-horizontal">
+                        @for (int i = 5; i < 10; i++)
+                        {
+                            <dt>@ViewBag.PriceLabels[i]</dt>
+                            <dd>@ViewBag.PriceRange[i]</dd>
+                        }
+                    </dl>
+                </div>
+                <p style="color:#f7f7f7; margin:0px; padding:0px">a</p>
             </div>
         </div>
 
         <!--Display game details.-->
         <div class="col-md-12">
-            <h3 style="text-align:center">Games Purchased</h3>
-            <table class="table">
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Title)
-                    </th>
-                    <th>
-                        System Name
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Price)
-                    </th>
-                    <th>
-                        Date Purchased
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Physical)
-                    </th>
-                    <th></th>
-                </tr>
+            <div class="panel panel-default whiteCard" style="margin-top:15px;">
+                <div class="panel-heading" style="text-align:center;line-height:.8">
+                    <h3 style="margin:0px;">Games Purchased</h3>
+                </div>
 
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Title)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.SystemName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Price)
-                        </td>
-                        <td>
-                            @item.DateOfPurchase.Value.ToShortDateString()
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Physical)
-                        </td>
-                    </tr>
-                }
-
-            </table>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Console</th>
+                                <th>Price</th>
+                                <th>Purchase Date</th>
+                                <th>Physical Copy</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Title)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SystemName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Price)
+                                    </td>
+                                    <td>
+                                        @item.DateOfPurchase.Value.ToShortDateString()
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Physical)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
         </div>
     </div>
