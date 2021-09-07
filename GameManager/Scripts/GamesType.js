@@ -48,5 +48,6 @@ function DetectError() {
 
 function ShowInput() {
     $("#typeTable").hide();
+    $("#displayType").empty();
     $("#searchType").show();
 }
