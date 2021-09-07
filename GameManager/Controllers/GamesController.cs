@@ -262,7 +262,10 @@ namespace GameManager.Controllers
 
             // Setup ViewBag of total games played over selected year.
             ViewBag.TotalGames = gamesListOfYear.Count();
-            
+
+            // Get Average amount spent per game.
+            ViewBag.AverageSpentPerGame = Math.Round((decimal) (ViewBag.TotalSpent / ViewBag.TotalGames));
+
             int[] monthlyCost = new int[12];
             int[] monthlyCount = new int[12];
             int[] priceRange = new int[10];

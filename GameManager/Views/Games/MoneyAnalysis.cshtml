@@ -59,20 +59,21 @@ else
             </script>
             <div class="whiteCard">
                 <!--Canvas used to display the chart.-->
-                <canvas id="myChart" width="700" height="250" style="padding:10px"></canvas>
+                <canvas id="myChart" width="700" height="275" style="padding:10px"></canvas>
             </div>
 
         </div>
 
         <!--Total spent in year and total games played.-->
         <div class="col-md-4">
-            <div class="whiteCard text-center" style="padding:10px">
-                <h3>Total Spent in @ViewBag.Year:</h3>
-                <h1>@ViewBag.TotalSpent$</h1>
+            <div class="whiteCard text-center" style="padding:10px;">
+                <h3 style="margin-bottom:0px; padding-bottom:0px">Total Spent</h3>
+                <h1 style="margin-top:0px; padding-top:0px">$@ViewBag.TotalSpent</h1>
 
-                <h3>Total Games Played in @ViewBag.Year:</h3>
-                <h1>@ViewBag.TotalGames</h1>
-
+                <h3 style="margin-bottom:0px; padding-bottom:0px">Total Games Played</h3>
+                <h1 style="margin-top:0px; padding-top:0px">@ViewBag.TotalGames</h1>
+                <h3 style="margin-bottom:0px; padding-bottom:0px">Average Spent per Game</h3>
+                <h1 style="margin-top:0px; padding-top:0px">$@ViewBag.AverageSpentPerGame</h1>
             </div>
         </div>
 
