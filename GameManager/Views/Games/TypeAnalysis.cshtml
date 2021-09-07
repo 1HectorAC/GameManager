@@ -2,6 +2,8 @@
 @{
     /**/
 
+    /**/
+
     ViewBag.Title = "TypeAnalysis";
 }
 
@@ -11,27 +13,39 @@
 
 @if (ViewBag.Year == null)
 {
-    <h2>TypeAnalysis</h2>
     using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 whiteCard text-center" style="padding: 10px; margin-top:10px">
+                <h2>TypeAnalysis</h2>
+                <hr class="greenLine" />
+                <p>Select a year to analyze.</p>
+                <div class="form-group">
+                    <label class="control-label col-md-3 col-md-offset-1" for="SelectYear">Select Year</label>
+                    <div class="col-md-6">
+                        @Html.DropDownList("SelectYear", null, htmlAttributes: new { @class = "form-control" })
+                        <span class="field-validation-valid text-danger" data-valmsg-for="SelectYear" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
 
-        <div class="form-group">
-            <label class="control-label col-md-2" for="SelectYear">Select Year</label>
-            @Html.DropDownList("SelectYear", null, htmlAttributes: new { @class = "form-control" })
-            <span class="field-validation-valid text-danger" data-valmsg-for="SelectYear" data-valmsg-replace="true"></span>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Enter" class="btn btn-default" />
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <br />
+                        <input type="submit" value="Enter" class="btn btn-default" />
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <p>Note: If you don't have any played games in your games List then you won't see any years to select. Go to games list @Html.ActionLink("here.", "Index", "Games")</p>
+                </div>
             </div>
         </div>
     }
 }
 else
 {
-    <h2 style="text-align:center">@ViewBag.Year TypeAnalysis</h2>
+    <h2 class="whiteText text-center">@ViewBag.Year Type Analysis</h2>
+    <hr class="whiteLine" style="margin-bottom:10px" />
     <div class="row">
 
         <!--Game Console pie chart.-->
@@ -49,39 +63,43 @@ else
 
             </script>
 
-            <!--Canvas used to display the chart.-->
-            <canvas id="myChart" height="350" style="width:100%;max-width:600px;"></canvas>
+            <div class="whiteCard">
+                <!--Canvas used to display the chart.-->
+                <canvas id="myChart" height="350" style="width:100%;max-width:600px;padding-bottom:15px; margin-top:5px"></canvas>
+            </div>
+
         </div>
 
         <!--Data display-->
         <div class="col-md-6">
             <div class="col-md-12">
-                <div style="text-align:center;">
+
+                <div class="text-center whiteCard" style="padding:1px; margin:5px">
                     <h3>Total Games Played in @ViewBag.Year:</h3>
                     <h1>@ViewBag.Count</h1>
                 </div>
             </div>
             <div class="col-md-6">
-                <div style="text-align:center;">
+                <div class="text-center whiteCard" style="padding:1px; margin:5px">
                     <h3>Total Borrowed:</h3>
                     <h1>@ViewBag.Borrowed</h1>
                 </div>
             </div>
 
             <div class="col-md-6">
-                <div style="text-align:center;">
+                <div class="text-center whiteCard" style="padding:1px; margin:5px">
                     <h3>Total Replayed:</h3>
                     <h1>@ViewBag.Replayed</h1>
                 </div>
             </div>
             <div class="col-md-6">
-                <div style="text-align:center;">
+                <div class="text-center whiteCard" style="padding:1px; margin:5px">
                     <h3>Physical Copy:</h3>
                     <h1>@ViewBag.Physical</h1>
                 </div>
             </div>
             <div class="col-md-6">
-                <div style="text-align:center;">
+                <div class="text-center whiteCard" style="padding:1px; margin:5px">
                     <h3>Digital Copy:</h3>
                     <h1>@ViewBag.Digital</h1>
                 </div>
@@ -90,7 +108,7 @@ else
 
         <!--Game list display.-->
         <div class="col-md-12">
-            <div class="panel panel-default" style="margin-top:10px;">
+            <div class="panel panel-default whiteCard" style="margin-top:10px;">
                 <div class="panel-heading" style="text-align:center;line-height:.8">
                     <h3 style="margin:0px;">Games List</h3>
                 </div>
