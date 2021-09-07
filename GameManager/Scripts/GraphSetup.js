@@ -1,42 +1,19 @@
 ﻿function BarGraphSetup(graphTitle, xValues, yValues) {
-    var barColors = [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)'
-    ];
-    var bColors = [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)',
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)'
-    ];
+    var g1 = '#38ef7d';
+    var g2 = '#11998e';
+    var g3 = '#05665b';
+    var color1 = [g1, g2, g1, g2, g1, g2, g1, g2, g1, g2, g1, g2];
+    var color2 = [g3, g3, g3, g3, g3, g3, g3, g3, g3, g3, g3, g3,];
 
     new Chart("myChart", {
         type: "bar",
         data: {
             labels: xValues,
             datasets: [{
-                backgroundColor: barColors,
+                backgroundColor: color1,
                 data: yValues,
-                borderColor: bColors,
-                borderWidth: 1
+                borderColor: color2,
+                borderWidth: 2
             }]
         },
         options: {
@@ -56,44 +33,20 @@
         }
     });
 }
-function PieGraphSetup( graphTitle, xValues, yValues) {
-    var barColors = [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)'
-    ];
-    var bColors = [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)',
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)'
-    ];
+function PieGraphSetup(graphTitle, xValues, yValues) {
+    var g3 = '#05665b';
+    var color1 = ['#38ef7d', '#18AD94', '#12E8DD', '#2E96E6', '#315AA6', '#656EE6', '#7DE843', '#6ADB00', '#63C757', '#59A6CF' ];
+    var color2 = [g3, g3, g3, g3, g3, g3, g3, g3, g3, g3, g3, g3,];
+
 
     new Chart("myChart", {
         type: "pie",
         data: {
             labels: xValues,
             datasets: [{
-                backgroundColor: barColors,
+                backgroundColor: color1,
                 data: yValues,
-                borderColor: bColors
+                borderColor: color2
             }]
         },
         options: {
