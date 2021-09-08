@@ -18,7 +18,7 @@
         @Html.AntiForgeryToken()
         <div class="row">
             <div class="col-md-6 col-md-offset-3 whiteCard text-center" style="padding: 10px; margin-top:10px">
-                <h2>TypeAnalysis</h2>
+                <h2>Type Analysis</h2>
                 <hr class="greenLine" />
                 <p>Select a year to analyze.</p>
                 <div class="form-group">
@@ -32,7 +32,7 @@
                 <div class="form-group">
                     <div class="col-md-12">
                         <br />
-                        <input type="submit" value="Enter" class="btn btn-default" />
+                        <input type="submit" value="Enter" class="btn customButton" />
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -75,32 +75,32 @@ else
             <div class="col-md-12">
 
                 <div class="text-center whiteCard" style="padding:1px; margin:5px">
-                    <h3>Total Games Played in @ViewBag.Year:</h3>
+                    <h3>Total Games Played</h3>
                     <h1>@ViewBag.Count</h1>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="text-center whiteCard" style="padding:1px; margin:5px">
-                    <h3>Total Borrowed:</h3>
+                    <h3>Total Borrowed</h3>
                     <h1>@ViewBag.Borrowed</h1>
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="text-center whiteCard" style="padding:1px; margin:5px">
-                    <h3>Total Replayed:</h3>
+                    <h3>Total Replayed</h3>
                     <h1>@ViewBag.Replayed</h1>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="text-center whiteCard" style="padding:1px; margin:5px">
-                    <h3>Physical Copy:</h3>
+                    <h3>Physical Copy</h3>
                     <h1>@ViewBag.Physical</h1>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="text-center whiteCard" style="padding:1px; margin:5px">
-                    <h3>Digital Copy:</h3>
+                    <h3>Digital Copy</h3>
                     <h1>@ViewBag.Digital</h1>
                 </div>
             </div>
@@ -146,7 +146,7 @@ else
 
                             <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Enter" class="btn btn-default" />
+                                    <input type="submit" value="Enter" class="btn customButton" />
                                 </div>
                             </div>
                         </form>
@@ -168,7 +168,7 @@ else
                         </table>
 
                         <!--Button to reset type search. -->
-                        <input id="resetSearch" class="btn btn-default" type="button" value="New  Type Search" onclick="ShowInput();" />
+                        <input id="resetSearch" class="btn customButton" type="button" value="New  Type Search" onclick="ShowInput();" />
                     </div>
                 </div>
 
