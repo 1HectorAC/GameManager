@@ -4,78 +4,90 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="panel panel-default whiteCard" style="margin-top:15px;">
+    <div class="panel-heading" style="text-align:center;line-height:.8">
+        <h2 style="">Games List</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.SystemName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UserId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateOfPurchase)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DatePlayed)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Borrowed)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Physical)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Replayed)
-        </th>
-        <th></th>
-    </tr>
+        <p>
+            @Html.ActionLink("Add Game", "Create")
+        </p>
+    </div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.GameSystem.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UserId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateOfPurchase)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DatePlayed)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Borrowed)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Physical)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Replayed)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    <div class="panel-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        Console
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Price)
+                    </th>
+                    <th>
+                        Purchase Date
+                    </th>
+                    <th>
+                        Date Played
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Borrowed)
+                    </th>
+                    <th>
+                        Physical Copy
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Replayed)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
 
-</table>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GameSystem.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @if (item.DateOfPurchase != null)
+                            {
+                                @item.DateOfPurchase.Value.ToShortDateString()
+                            }
+                        </td>
+                        <td>
+                            @if (item.DatePlayed != null)
+                            {
+                                @item.DatePlayed.Value.ToShortDateString()
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Borrowed)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Physical)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Replayed)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
