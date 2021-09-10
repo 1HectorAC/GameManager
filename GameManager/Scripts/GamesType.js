@@ -39,7 +39,7 @@ function AddGamesList(data) {
         $("#displayType").append(dataRow);
     }
 
-    $("#typeTable").show();
+    $("#typeTable").fadeIn();
 }
 
 function DetectError() {
@@ -49,5 +49,14 @@ function DetectError() {
 function ShowInput() {
     $("#typeTable").hide();
     $("#displayType").empty();
-    $("#searchType").show();
+    $("#searchType").fadeIn();
 }
+
+
+// Fade console section in or out depending on type selected. 
+$("#consoleButton").click(function () {
+    $('#consoleSection').fadeIn();
+});
+$(".notConsoleButton").click(function () {
+    $('#consoleSection').fadeOut();
+});

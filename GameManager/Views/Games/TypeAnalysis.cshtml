@@ -109,52 +109,47 @@ else
         <!--Game list display.-->
         <div class="col-md-12">
             <div class="panel panel-default whiteCard" style="margin-top:10px;">
-                <div class="panel-heading" style="text-align:center;line-height:.8">
+                <div class="panel-heading text-center" style="line-height:.8;">
                     <h3 style="margin:0px;">Games List</h3>
                 </div>
 
                 <div class="panel-body">
 
-                    <!--Input type search.-->
-                    <div class="col-md-4 col-lg-offset-4" id="searchType">
+                    <div class="text-center" id="searchType" style="margin: 0 auto">
                         <form name="type_Form" id="type_Form" action="">
-                            <h4>Search the games of a specific type:</h4>
-                            <div class="form-group">
-                                <input data-val="true" id="Year" name="Year" type="hidden" value=@ViewBag.Year />
-
-                                <input type="radio" id="type1" name="Type" value="1" checked="checked">
-                                <label for="type1">Borrowed</label><br>
-
-                                <input type="radio" id="type2" name="Type" value="2">
-                                <label for="type2">Replayed</label><br>
-
-                                <input type="radio" id="type3" name="Type" value="3">
-                                <label for="type3">Physical</label><br />
-
-                                <input type="radio" id="type4" name="Type" value="4">
-                                <label for="type4">Digital</label><br />
-
-                                <input type="radio" id="type5" name="Type" value="5">
-
-                                <label for="type5">Game System</label>
-
-
+                            <input data-val="true" id="Year" name="Year" type="hidden" value=@ViewBag.Year />
+                            <h4>Select Search Type</h4>
+                            <div class="btn-group btn-group-toggle " data-toggle="buttons">
+                                <label class="btn btn-primary active notConsoleButton">
+                                    <input type="radio" name="Type" id="option1" value="1" autocomplete="off" checked> Borrowed
+                                </label>
+                                <label class="btn btn-primary notConsoleButton">
+                                    <input type="radio" name="Type" id="option2" value="2" autocomplete="off"> Replayed
+                                </label>
+                                <label class="btn btn-primary notConsoleButton">
+                                    <input type="radio" name="Type" id="option3" value="3" autocomplete="off"> Physical Copy
+                                </label>
+                                <label class="btn btn-primary notConsoleButton">
+                                    <input type="radio" name="Type" id="option4" value="4" autocomplete="off"> Digital Copy
+                                </label>
+                                <label class="btn btn-primary" id="consoleButton">
+                                    <input type="radio" name="Type" id="option5" value="5" autocomplete="off"> Console
+                                </label>
+                            </div>
+                            <div id="consoleSection" hidden>
+                                <h4>Select Console</h4>
                                 <label class="control-label" for="SelectSystemName" hidden>Select System</label>
-                                @Html.DropDownList("SelectSystemName", null, htmlAttributes: new { @class = "form-control", @style = "width: 100px; display:inline-block" })
+                                @Html.DropDownList("SelectSystemName", null, htmlAttributes: new { @class = "form-control btn btn-primary", @style = "width: 100px; display:inline-block" })
                                 <span class="field-validation-valid text-danger" data-valmsg-for="SelectSystemName" data-valmsg-replace="true"></span>
                             </div>
-
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Enter" class="btn customButton" />
-                                </div>
-                            </div>
+                            <br /><br />
+                            <input type="submit" value="Enter" class="btn customButton" />
                         </form>
                     </div>
 
                     <!-- Type table setup. -->
-                    <div class="" id="typeTable" hidden>
-                        <h3 id="tableTitle" style="text-align:center"></h3>
+                    <div id="typeTable" hidden>
+                        <h3 id="tableTitle" style="text-align:center; color:#45c687"></h3>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
