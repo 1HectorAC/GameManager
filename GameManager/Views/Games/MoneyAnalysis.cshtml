@@ -79,52 +79,66 @@ else
 
         <!--Monthly spent numbers.-->
         <div class="col-md-6">
-            <div class="whiteCard text-center" style="padding:10px; margin-top:15px">
-                <h3>Monthly Count & Spending($)</h3>
-                <div class="col-md-6">
-                    <dl class="dl-horizontal">
-                        @for (int i = 0; i < 6; i++)
-                        {
-                            <dt>@ViewBag.Months[i]</dt>
-                            <dd>@ViewBag.MonthlyCount[i] ($@ViewBag.MonthlyCost[i])</dd>
-                        }
-                    </dl>
+            <div class="whiteCard " style="padding:10px; margin-top:15px;line-height:12px">
+                <h3 class="text-center">Monthly Count & Spending($)</h3>
+                <div class="col-md-3">
+                    @for (int i = 0; i < 6; i++)
+                    {
+                        <p class="text-right"><b>@ViewBag.Months[i]</b></p>
+                    }
                 </div>
-                <div class="col-md-6">
-                    <dl class="dl-horizontal">
-                        @for (int i = 6; i < 12; i++)
-                        {
-                            <dt>@ViewBag.Months[i]</dt>
-                            <dd>@ViewBag.MonthlyCount[i] ($@ViewBag.MonthlyCost[i])</dd>
-                        }
-                    </dl>
+                <div class="col-md-3">
+                    @for (int i = 0; i < 6; i++)
+                    {
+                        <p>@ViewBag.MonthlyCount[i] ($@ViewBag.MonthlyCost[i])</p>
+                    }
                 </div>
+                <div class="col-md-3">
+                    @for (int i = 6; i < 12; i++)
+                    {
+                        <p class="text-right"><b>@ViewBag.Months[i]</b></p>
+                    }
+                </div>
+                <div class="col-md-3">
+                    @for (int i = 6; i < 12; i++)
+                    {
+                        <p>@ViewBag.MonthlyCount[i] ($@ViewBag.MonthlyCost[i])</p>
+                    }
+                </div>
+
                 <p style="color:#f7f7f7; margin:0px; padding:0px">a</p>
             </div>
         </div>
 
         <!--Monthly count.-->
         <div class="col-md-6">
-            <div class="whiteCard text-center" style="padding:10px; margin-top:15px">
-                <h3>Price Range Analysis</h3>
-                <div class="col-md-6">
-                    <dl class="dl-horizontal">
-                        @for (int i = 0; i < 5; i++)
-                        {
-                            <dt>@ViewBag.PriceLabels[i]</dt>
-                            <dd>@ViewBag.PriceRange[i]</dd>
-                        }
-                    </dl>
+            <div class="whiteCard" style="padding:10px; margin-top:15px;line-height:12px">
+                <h3 class="text-center">Price Range Analysis</h3>
+                <div class="col-md-3">
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        <p class="text-right"><b>@ViewBag.PriceLabels[i]</b></p>
+                    }
                 </div>
-                <div class="col-md-6">
-                    <dl class="dl-horizontal">
-                        @for (int i = 5; i < 10; i++)
-                        {
-                            <dt>@ViewBag.PriceLabels[i]</dt>
-                            <dd>@ViewBag.PriceRange[i]</dd>
-                        }
-                    </dl>
+                <div class="col-md-3">
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        <p class="text-left">@ViewBag.PriceRange[i]</p>
+                    }
                 </div>
+                <div class="col-md-3">
+                    @for (int i = 5; i < 10; i++)
+                    {
+                        <p class="text-right"><b>@ViewBag.PriceLabels[i]</b></p>
+                    }
+                </div>
+                <div class="col-md-3">
+                    @for (int i = 5; i < 10; i++)
+                    {
+                        <p class="text-left">@ViewBag.PriceRange[i]</p>
+                    }
+                </div>
+
                 <p style="color:#f7f7f7; margin:0px; padding:0px">a</p>
             </div>
         </div>
