@@ -4,100 +4,110 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+<br />
+<div class="row">
+    <div class="col-md-6 col-md-offset-3 text-center whiteCard">
+        <h2>Edit Game</h2>
+        <h4>Edit a game from your games list here</h4>
 
+        <hr class="greenLine" />
+        <br />
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Game</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-            </div>
-        </div>
+            <div class="form-horizontal text-center">
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.SystemName, "SystemName", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("SystemName", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.SystemName, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2 col-md-offset-1" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                    </div>
+                </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.DateOfPurchase, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.DateOfPurchase, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DateOfPurchase, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-md-offset-1" for="Price">Price($)</label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                    </div>
+                </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.DatePlayed, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.DatePlayed, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DatePlayed, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-md-offset-1" for="SystemName">Console</label>
+                    <div class="col-md-8">
+                        @Html.DropDownList("SystemName", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.SystemName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Borrowed, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Borrowed)
-                    @Html.ValidationMessageFor(model => model.Borrowed, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <label class="control-label col-md-3" for="DateOfPurchase">Purchased Date (MM/DD/YY)</label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.DateOfPurchase, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DateOfPurchase, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-3" for="DatePlayed">Date Played (MM/DD/YY)</label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.DatePlayed, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DatePlayed, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div>
+                    @Html.LabelFor(model => model.Borrowed, htmlAttributes: new { @class = "control-label col-md-2 col-md-offset-1" })
+                    <div class="col-md-1">
+                        <div class="checkbox text-left">
+                            @Html.EditorFor(model => model.Borrowed)
+                            @Html.ValidationMessageFor(model => model.Borrowed, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    @Html.LabelFor(model => model.Physical, htmlAttributes: new { @class = "control-label col-md-2 col-md-offset-1" })
+                    <div class="col-md-1">
+                        <div class="checkbox text-left">
+                            @Html.EditorFor(model => model.Physical)
+                            @Html.ValidationMessageFor(model => model.Physical, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    @Html.LabelFor(model => model.Replayed, htmlAttributes: new { @class = "control-label col-md-2 col-md-offset-1" })
+                    <div class="col-md-1">
+                        <div class="checkbox text-left">
+                            @Html.EditorFor(model => model.Replayed)
+                            @Html.ValidationMessageFor(model => model.Replayed, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <br />
+                        <input type="submit" value="Save" class="btn customButton" />
+                        <p>Note: Title & a date fields are required. Price needs to be a whole number.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Physical, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Physical)
-                    @Html.ValidationMessageFor(model => model.Physical, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Replayed, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Replayed)
-                    @Html.ValidationMessageFor(model => model.Replayed, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
+        }
+        <div>
+            @Html.ActionLink("Go to Games List", "Index")
+            <br /><br />
         </div>
     </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
 </div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
