@@ -351,6 +351,15 @@ namespace GameManager.Controllers
             // Make selection list for systems currently played for a drop down
             ViewBag.SelectSystemName = new SelectList(gamesList.Select(g => g.SystemName).Distinct());
 
+            int[] monthlyCount = new int[12];
+            // Setup values for montlyCount
+            foreach (Game g in gamesList.ToList())
+            {
+                monthlyCount[g.DatePlayed.Value.Month - 1] += 1;
+            }
+            ViewBag.MonthlyCount = monthlyCount;
+            ViewBag.Months = new string[] { "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+
             return View();
         }
 

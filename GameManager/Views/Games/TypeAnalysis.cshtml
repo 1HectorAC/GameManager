@@ -79,19 +79,56 @@ else
                     <h1>@ViewBag.Count</h1>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="text-center whiteCard" style="padding:1px; margin:5px">
                     <h3>Total Borrowed</h3>
                     <h1>@ViewBag.Borrowed</h1>
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="text-center whiteCard" style="padding:1px; margin:5px">
                     <h3>Total Replayed</h3>
                     <h1>@ViewBag.Replayed</h1>
                 </div>
             </div>
+            
+        </div>
+
+        <!--Monthly Count numbers.-->
+        <div class="col-md-6">
+            <div class="whiteCard " style="padding:10px; margin-top:5px;line-height:12px">
+                <h3 class="text-center">Games Played by Month</h3>
+                <div class="col-md-3">
+                    @for (int i = 0; i < 6; i++)
+                    {
+                        <p class="text-right"><b>@ViewBag.Months[i]</b></p>
+                    }
+                </div>
+                <div class="col-md-3">
+                    @for (int i = 0; i < 6; i++)
+                    {
+                        <p>@ViewBag.MonthlyCount[i]</p>
+                    }
+                </div>
+                <div class="col-md-3">
+                    @for (int i = 6; i < 12; i++)
+                    {
+                        <p class="text-right"><b>@ViewBag.Months[i]</b></p>
+                    }
+                </div>
+                <div class="col-md-3">
+                    @for (int i = 6; i < 12; i++)
+                    {
+                        <p>@ViewBag.MonthlyCount[i]</p>
+                    }
+                </div>
+
+                <p style="color:#f7f7f7; margin:0px; padding:0px">a</p>
+            </div>
+        </div>
+
+        <div class="col-md-6">
             <div class="col-md-6">
                 <div class="text-center whiteCard" style="padding:1px; margin:5px">
                     <h3>Physical Copy</h3>
@@ -105,6 +142,7 @@ else
                 </div>
             </div>
         </div>
+
 
         <!--Game list display.-->
         <div class="col-md-12">
