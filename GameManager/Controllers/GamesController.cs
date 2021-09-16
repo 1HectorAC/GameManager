@@ -252,9 +252,9 @@ namespace GameManager.Controllers
         public ActionResult MoneyAnalysis(int SelectYear)
         {
             ViewBag.Year = SelectYear;
-            var gamesList = GetUserGamesList(User.Identity.GetUserId());
-          
+
             // Get list of games based off selected year.
+            var gamesList = GetUserGamesList(User.Identity.GetUserId());
             var gamesListOfYear = gamesList.Where(g => g.DateOfPurchase != null && g.Price != null && g.DateOfPurchase.Value.Year == SelectYear).OrderByDescending(g => g.DateOfPurchase);
 
             // Setup ViewBag of total money spent over selected year.
@@ -262,6 +262,12 @@ namespace GameManager.Controllers
 
             // Setup ViewBag of total games played over selected year.
             ViewBag.TotalGames = gamesListOfYear.Count();
+
+            // Setup View bag of total physical games bought.
+            ViewBag.PhysicalTotal = gamesListOfYear.Where(g => g.Physical == true).Count();
+
+            // Setup View bag of total digital games bought.
+            ViewBag.DigitalTotal = ViewBag.TotalGames - ViewBag.PhysicalTotal;
 
             // Get Average amount spent per game.
             ViewBag.AverageSpentPerGame = Math.Round((decimal) (ViewBag.TotalSpent / ViewBag.TotalGames));

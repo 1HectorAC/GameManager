@@ -47,6 +47,29 @@ else
     <hr class="whiteLine" style="margin-bottom:10px" />
     <div class="row">
 
+        <!--Data items.-->
+        <div class="col-md-12">
+            <div class="whiteCard text-center" style="padding:10px; margin-bottom:10px">
+                <div class="col-md-3">
+                    <h3 style="margin-bottom:0px; padding-bottom:0px">Total Spent</h3>
+                    <h1 style="margin-top:0px; padding-top:0px">$@ViewBag.TotalSpent</h1>
+                </div>
+                <div class="col-md-3">
+                    <h3 style="margin-bottom:0px; padding-bottom:0px">Total Games Bought</h3>
+                    <h1 style="margin-top:0px; padding-top:0px">@ViewBag.TotalGames</h1>
+                </div>
+                <div class="col-md-3">
+                    <h3 style="margin-bottom:0px; padding-bottom:0px">Average Spent/Game</h3>
+                    <h1 style="margin-top:0px; padding-top:0px">$@ViewBag.AverageSpentPerGame</h1>
+                </div>
+                <div class="col-md-3">
+                    <h3 style="margin-bottom:0px; padding-bottom:0px">Physical/Digital</h3>
+                    <h1 style="margin-top:0px; padding-top:0px">@ViewBag.PhysicalTotal - @ViewBag.DigitalTotal</h1>
+                </div>
+                <p style="color:#f7f7f7; margin:0px; padding:0px">a</p>
+            </div>
+        </div>
+
         <!--Monthly Cost chart.-->
         <div class="col-md-8">
             <!--Setup monthly cost related variable(costData) for chart setup in other js file.-->
@@ -64,16 +87,36 @@ else
 
         </div>
 
-        <!--Total spent in year and total games played.-->
+        <!--Price Range Table.-->
         <div class="col-md-4">
-            <div class="whiteCard text-center" style="padding:10px;">
-                <h3 style="margin-bottom:0px; padding-bottom:0px">Total Spent</h3>
-                <h1 style="margin-top:0px; padding-top:0px">$@ViewBag.TotalSpent</h1>
+            <div class="whiteCard" style="padding:10px; margin-top:15px;line-height:12px">
+                <h3 class="text-center">Price Range Analysis</h3>
+                <div class="col-md-3">
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        <p class="text-right"><b>@ViewBag.PriceLabels[i]</b></p>
+                    }
+                </div>
+                <div class="col-md-3">
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        <p class="text-left">@ViewBag.PriceRange[i]</p>
+                    }
+                </div>
+                <div class="col-md-3">
+                    @for (int i = 5; i < 10; i++)
+                    {
+                        <p class="text-right"><b>@ViewBag.PriceLabels[i]</b></p>
+                    }
+                </div>
+                <div class="col-md-3">
+                    @for (int i = 5; i < 10; i++)
+                    {
+                        <p class="text-left">@ViewBag.PriceRange[i]</p>
+                    }
+                </div>
 
-                <h3 style="margin-bottom:0px; padding-bottom:0px">Total Games Played</h3>
-                <h1 style="margin-top:0px; padding-top:0px">@ViewBag.TotalGames</h1>
-                <h3 style="margin-bottom:0px; padding-bottom:0px">Average Spent per Game</h3>
-                <h1 style="margin-top:0px; padding-top:0px">$@ViewBag.AverageSpentPerGame</h1>
+                <p style="color:#f7f7f7; margin:0px; padding:0px">a</p>
             </div>
         </div>
 
@@ -103,39 +146,6 @@ else
                     @for (int i = 6; i < 12; i++)
                     {
                         <p>@ViewBag.MonthlyCount[i] ($@ViewBag.MonthlyCost[i])</p>
-                    }
-                </div>
-
-                <p style="color:#f7f7f7; margin:0px; padding:0px">a</p>
-            </div>
-        </div>
-
-        <!--Monthly count.-->
-        <div class="col-md-6">
-            <div class="whiteCard" style="padding:10px; margin-top:15px;line-height:12px">
-                <h3 class="text-center">Price Range Analysis</h3>
-                <div class="col-md-3">
-                    @for (int i = 0; i < 5; i++)
-                    {
-                        <p class="text-right"><b>@ViewBag.PriceLabels[i]</b></p>
-                    }
-                </div>
-                <div class="col-md-3">
-                    @for (int i = 0; i < 5; i++)
-                    {
-                        <p class="text-left">@ViewBag.PriceRange[i]</p>
-                    }
-                </div>
-                <div class="col-md-3">
-                    @for (int i = 5; i < 10; i++)
-                    {
-                        <p class="text-right"><b>@ViewBag.PriceLabels[i]</b></p>
-                    }
-                </div>
-                <div class="col-md-3">
-                    @for (int i = 5; i < 10; i++)
-                    {
-                        <p class="text-left">@ViewBag.PriceRange[i]</p>
                     }
                 </div>
 
