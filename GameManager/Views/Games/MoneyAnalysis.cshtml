@@ -59,7 +59,7 @@ else
             </script>
             <div class="whiteCard">
                 <!--Canvas used to display the chart.-->
-                <canvas id="myChart" width="700" height="275" style="padding:10px"></canvas>
+                <canvas id="costBarGraph" width="700" height="275" style="padding:10px"></canvas>
             </div>
 
         </div>
@@ -192,6 +192,6 @@ else
 
     <script src="@Url.Content("~/Scripts/GraphSetup.js")" type="text/javascript"></script>
     <script>
-        BarGraphSetup("Monthly Spending Chart($)", ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], costData);
+        BarGraphSetup("costBarGraph","Monthly Spending Chart($)", ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], costData);
     </script>
 }
