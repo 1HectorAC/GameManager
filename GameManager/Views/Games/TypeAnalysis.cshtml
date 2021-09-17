@@ -48,6 +48,29 @@ else
     <hr class="whiteLine" style="margin-bottom:10px" />
     <div class="row">
 
+        <!--Data items.-->
+        <div class="col-md-12">
+            <div class="whiteCard text-center" style="padding:10px; margin-bottom:10px">
+                <div class="col-md-3">
+                    <h3 style="margin-bottom:0px; padding-bottom:0px">Games Played</h3>
+                    <h1 style="margin-top:0px; padding-top:0px">@ViewBag.Count</h1>
+                </div>
+                <div class="col-md-3">
+                    <h3 style="margin-bottom:0px; padding-bottom:0px">Borrowed</h3>
+                    <h1 style="margin-top:0px; padding-top:0px">@ViewBag.Borrowed</h1>
+                </div>
+                <div class="col-md-3">
+                    <h3 style="margin-bottom:0px; padding-bottom:0px">Replayed</h3>
+                    <h1 style="margin-top:0px; padding-top:0px">@ViewBag.Replayed</h1>
+                </div>
+                <div class="col-md-3">
+                    <h3 style="margin-bottom:0px; padding-bottom:0px">Physical/Digital</h3>
+                    <h1 style="margin-top:0px; padding-top:0px">@ViewBag.Physical - @ViewBag.Digital</h1>
+                </div>
+                <p style="color:#f7f7f7; margin:0px; padding:0px">a</p>
+            </div>
+        </div>
+
         <!--Game Console pie chart.-->
         <div class="col-md-6">
             <!--Setup system name and data for chart.-->
@@ -70,30 +93,7 @@ else
 
         </div>
 
-        <!--Data display-->
-        <div class="col-md-6">
-            <div class="col-md-12">
-
-                <div class="text-center whiteCard" style="padding:1px; margin:5px">
-                    <h3>Total Games Played</h3>
-                    <h1>@ViewBag.Count</h1>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="text-center whiteCard" style="padding:1px; margin:5px">
-                    <h3>Total Borrowed</h3>
-                    <h1>@ViewBag.Borrowed</h1>
-                </div>
-            </div>
-
-            <div class="col-md-12">
-                <div class="text-center whiteCard" style="padding:1px; margin:5px">
-                    <h3>Total Replayed</h3>
-                    <h1>@ViewBag.Replayed</h1>
-                </div>
-            </div>
-            
-        </div>
+    
 
         <!--Monthly Count numbers.-->
         <div class="col-md-6">
@@ -125,21 +125,6 @@ else
                 </div>
 
                 <p style="color:#f7f7f7; margin:0px; padding:0px">a</p>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="col-md-6">
-                <div class="text-center whiteCard" style="padding:1px; margin:5px">
-                    <h3>Physical Copy</h3>
-                    <h1>@ViewBag.Physical</h1>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="text-center whiteCard" style="padding:1px; margin:5px">
-                    <h3>Digital Copy</h3>
-                    <h1>@ViewBag.Digital</h1>
-                </div>
             </div>
         </div>
 
@@ -211,7 +196,7 @@ else
 
     <script src="@Url.Content("~/Scripts/GraphSetup.js")" type="text/javascript"></script>
     <script>
-        PieGraphSetup("consolePie", "Game Console Count", systemNames, systemData);
+        PieGraphSetup("consolePie", "Played Games Console", systemNames, systemData);
     </script>
 }
 
