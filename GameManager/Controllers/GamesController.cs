@@ -274,14 +274,24 @@ namespace GameManager.Controllers
 
             int[] monthlyCost = new int[12];
             int[] monthlyCount = new int[12];
+            int[] monthlyPhysicalCount = new int[12];
+            int[] monthlyDigitalCount = new int[12];
             int[] priceRange = new int[10];
             int index = 0;
             // Setup values for montlyCost, montlyCount, and priceRange
             foreach (Game g in gamesListOfYear.ToList())
             {
+                // Increment cost and count.
                 monthlyCost[g.DateOfPurchase.Value.Month - 1] += (int)g.Price;
                 monthlyCount[g.DateOfPurchase.Value.Month - 1] += 1;
                 
+                // Increment montlyPhysicalCount or monthlyDigitalCount.
+                if(g.Physical == true)
+                    monthlyPhysicalCount[g.DateOfPurchase.Value.Month - 1] += 1;
+                else
+                    monthlyDigitalCount[g.DateOfPurchase.Value.Month - 1] += 1;
+
+                // Increment for price range.
                 decimal gameCost = g.Price.Value;
                 if (gameCost < 20)
                     priceRange[0]++;
@@ -294,6 +304,9 @@ namespace GameManager.Controllers
             ViewBag.MonthlyCost = monthlyCost;
             ViewBag.MonthlyCount = monthlyCount;
             ViewBag.PriceRange = priceRange;
+            ViewBag.MonthlyPhysicalCount = monthlyPhysicalCount;
+            ViewBag.MonthlyDigitalCount = monthlyDigitalCount;
+
 
             // Get GameSystem count and names arrays.
             var systemNames = gamesListOfYear.Select(g => g.SystemName).Distinct().ToArray();
