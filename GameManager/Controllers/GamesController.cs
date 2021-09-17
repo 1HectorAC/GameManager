@@ -295,6 +295,16 @@ namespace GameManager.Controllers
             ViewBag.MonthlyCount = monthlyCount;
             ViewBag.PriceRange = priceRange;
 
+            // Get GameSystem count and names arrays.
+            var systemNames = gamesListOfYear.Select(g => g.SystemName).Distinct().ToArray();
+            int[] systemCounts = new int[systemNames.Length];
+            foreach (string x in gamesListOfYear.Select(g => g.SystemName))
+            {
+                systemCounts[Array.FindIndex(systemNames, g => g == x)] += 1;
+            }
+            ViewBag.SystemNames = systemNames;
+            ViewBag.SystemCounts = systemCounts;
+
 
             ViewBag.Months = new string[] { "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
             ViewBag.PriceLabels = new string[] { "<$20", "$20-$29", "$30-$39", "$40-$49", "$50-$59", "$60-$69", "$70-$79", "$80-$89", "$90-$99", ">$100" };

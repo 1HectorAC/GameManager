@@ -153,6 +153,31 @@ else
             </div>
         </div>
 
+        <div class="col-md-6">
+            <!--Setup system name and data for chart.-->
+            <script>
+                var systemData = new Array();
+                var systemNames = new Array();
+                var systemArray = @Html.Raw(Json.Encode(@ViewBag.SystemCounts));
+                var systemArray2 = @Html.Raw(Json.Encode(@ViewBag.SystemNames));
+                console.log(systemArray)
+                console.log(systemArray2)
+                for(var i =0; i<systemArray.length;i++){
+                    systemData[i] = systemArray[i];
+                    systemNames[i] = systemArray2[i];
+                }
+                console.log(systemData)
+                console.log(systemNames)
+
+            </script>
+
+            <div class="whiteCard">
+                <!--Canvas used to display the chart.-->
+                <canvas id="consolePie" height="350" style="width:100%;max-width:600px;padding-bottom:15px; margin-top:15px"></canvas>
+            </div>
+
+        </div>
+
         <!--Display game details.-->
         <div class="col-md-12">
             <div class="panel panel-default whiteCard" style="margin-top:15px;">
@@ -202,6 +227,8 @@ else
 
     <script src="@Url.Content("~/Scripts/GraphSetup.js")" type="text/javascript"></script>
     <script>
-        BarGraphSetup("costBarGraph","Monthly Spending Chart($)", ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], costData);
+        BarGraphSetup("costBarGraph", "Monthly Spending Chart($)", ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], costData);
+        PieGraphSetup("consolePie", "Bought Games by Console", systemNames, systemData);
+
     </script>
 }
