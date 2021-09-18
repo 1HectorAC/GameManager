@@ -383,6 +383,8 @@ namespace GameManager.Controllers
             int[] monthlyCount = new int[12];
             int[] borrowedMonthlyCount = new int[12];
             int[] replayedMonthlyCount = new int[12];
+            int[] physicalMonthlyCount = new int[12];
+            int[] digitalMonthlyCount = new int[12];
 
             // Setup values for monthly data.
             foreach (Game g in gamesList.ToList())
@@ -392,10 +394,16 @@ namespace GameManager.Controllers
                     borrowedMonthlyCount[g.DatePlayed.Value.Month - 1] += 1;
                 if (g.Replayed == true)
                     replayedMonthlyCount[g.DatePlayed.Value.Month - 1] += 1;
+                if (g.Physical == true)
+                    physicalMonthlyCount[g.DatePlayed.Value.Month - 1] += 1;
+                else
+                    digitalMonthlyCount[g.DatePlayed.Value.Month - 1] += 1;
             }
             ViewBag.MonthlyCount = monthlyCount;
             ViewBag.BorrowedMonthlyCount = borrowedMonthlyCount;
             ViewBag.ReplayedMonthlyCount = replayedMonthlyCount;
+            ViewBag.PhysicalMonthlyCount = physicalMonthlyCount;
+            ViewBag.DigitalMonthlyCount = digitalMonthlyCount;
             ViewBag.Months = new string[] { "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 
 
