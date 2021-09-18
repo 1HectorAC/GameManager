@@ -49,7 +49,7 @@ else
 
         <!--Data items.-->
         <div class="col-md-12">
-            <div class="whiteCard text-center" style="padding:10px; margin-bottom:10px">
+            <div class="whiteCard text-center">
                 <div class="col-md-3">
                     <h3 style="margin-bottom:0px; padding-bottom:0px">Total Spent</h3>
                     <h1 style="margin-top:0px; padding-top:0px">$@ViewBag.TotalSpent</h1>
@@ -85,90 +85,9 @@ else
                 <canvas id="costBarGraph" width="700" height="275" style="padding:10px"></canvas>
             </div>
 
-        </div>
-
-        <!--Price Range Table.-->
-        <div class="col-md-4">
-            <div class="whiteCard" style="padding:10px; margin-top:15px;line-height:12px">
-                <h3 class="text-center">Price Range Analysis</h3>
-                <div class="col-md-3">
-                    @for (int i = 0; i < 5; i++)
-                    {
-                        <p class="text-right"><b>@ViewBag.PriceLabels[i]</b></p>
-                    }
-                </div>
-                <div class="col-md-3">
-                    @for (int i = 0; i < 5; i++)
-                    {
-                        <p class="text-left">@ViewBag.PriceRange[i]</p>
-                    }
-                </div>
-                <div class="col-md-3">
-                    @for (int i = 5; i < 10; i++)
-                    {
-                        <p class="text-right"><b>@ViewBag.PriceLabels[i]</b></p>
-                    }
-                </div>
-                <div class="col-md-3">
-                    @for (int i = 5; i < 10; i++)
-                    {
-                        <p class="text-left">@ViewBag.PriceRange[i]</p>
-                    }
-                </div>
-
-                <p style="color:#f7f7f7; margin:0px; padding:0px">a</p>
-            </div>
-        </div>
-
-        <!--Monthly data.-->
-        <div class="col-md-6">
-            <div class="panel panel-default whiteCard" style="margin-top:15px;">
-                <div class="panel-heading" style="text-align:center;line-height:.8">
-                    <h3 style="margin:0px;">Monthly Bought Games Data</h3>
-                </div>
-
-                <div class="panel-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Month</th>
-                                <th>Cost</th>
-                                <th>Count</th>
-                                <th>Physical</th>
-                                <th>Digital</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for(int i = 0; i < @ViewBag.Months.Length; i++)
-                            {
-                            <tr>
-                                <td>
-                                    @ViewBag.Months[i]
-                                </td>
-                                <td>
-                                    @ViewBag.MonthlyCost[i]
-                                </td>
-                                <td>
-                                    @ViewBag.MonthlyCount[i]
-                                </td>
-                                <td>
-                                    @ViewBag.monthlyPhysicalCount[i]
-                                </td>
-                                <td>
-                                    @ViewBag.monthlyDigitalCount[i]
-                                </td>
-                            </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-        </div>
-
-                <div class="col-md-6">
-                    <!--Setup system name and data for chart.-->
-                    <script>
+            <div class="col-md-8">
+                <!--Setup system name and data for chart.-->
+                <script>
                 var systemData = new Array();
                 var systemNames = new Array();
                 var systemArray = @Html.Raw(Json.Encode(@ViewBag.SystemCounts));
@@ -182,66 +101,135 @@ else
                 console.log(systemData)
                 console.log(systemNames)
 
-                    </script>
+                </script>
 
-                    <div class="whiteCard">
-                        <!--Canvas used to display the chart.-->
-                        <canvas id="consolePie" height="350" style="width:100%;max-width:600px;padding-bottom:15px; margin-top:15px"></canvas>
-                    </div>
-
-                </div>
-
-                <!--Display game details.-->
-                <div class="col-md-12">
-                    <div class="panel panel-default whiteCard" style="margin-top:15px;">
-                        <div class="panel-heading" style="text-align:center;line-height:.8">
-                            <h3 style="margin:0px;">Games Purchased</h3>
-                        </div>
-
-                        <div class="panel-body">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Console</th>
-                                        <th>Price</th>
-                                        <th>Purchase Date</th>
-                                        <th>Physical Copy</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Title)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.SystemName)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Price)
-                                            </td>
-                                            <td>
-                                                @item.DateOfPurchase.Value.ToShortDateString()
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Physical)
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
+                <div class="whiteCard">
+                    <!--Canvas used to display the chart.-->
+                    <canvas id="consolePie" height="350" style="width:100%;max-width:600px;padding-bottom:15px"></canvas>
                 </div>
             </div>
 
-            <script src="@Url.Content("~/Scripts/GraphSetup.js")" type="text/javascript"></script>
-            <script>
-                BarGraphSetup("costBarGraph", "Monthly Spending Chart($)", ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], costData);
-                PieGraphSetup("consolePie", "Bought Games by Console", systemNames, systemData);
+            <!--Price Range Table.-->
+            <div class="col-md-4">
+                <div class="whiteCard" style="padding:5px; font-size:16px; line-height:14px">
+                    <h3 class="text-center">Price Range Analysis</h3>
+                    <hr class="greenLine"/>
+                    <br />
+                    <div class="col-md-6">
+                        @for (int i = 0; i < 10; i++)
+                        {
+                            <p class="text-right"><b>@ViewBag.PriceLabels[i]</b></p>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        @for (int i = 0; i < 10; i++)
+                        {
+                            <p class="text-left">@ViewBag.PriceRange[i]</p>
+                        }
+                    </div>
+                    
 
-            </script>
-            }
+                    <p style="color:#f7f7f7; margin:0px; padding:0px">a</p>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!--Monthly data.-->
+        <div class="col-md-4">
+            <div class="panel panel-default whiteCard">
+                <div class="panel-heading text-center" style="line-height:.8">
+                    <h3 style="margin:0px;">Physical/Digital by Month</h3>
+                </div>
+
+                <div class="panel-body" >
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Total</th>
+                                <th>Physical</th>
+                                <th>Digital</th>
+                            </tr>
+                        </thead>
+                        <tbody >
+                            @for (int i = 0; i < @ViewBag.Months.Length; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @ViewBag.Months[i]
+                                    </td>
+                                    <td>
+                                        @ViewBag.MonthlyCount[i]
+                                    </td>
+                                    <td>
+                                        @ViewBag.monthlyPhysicalCount[i]
+                                    </td>
+                                    <td>
+                                        @ViewBag.monthlyDigitalCount[i]
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!--Display game details.-->
+        <div class="col-md-12">
+            <div class="panel panel-default whiteCard" style="margin-top:15px;">
+                <div class="panel-heading" style="text-align:center;line-height:.8">
+                    <h3 style="margin:0px;">Games Purchased</h3>
+                </div>
+
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Console</th>
+                                <th>Price</th>
+                                <th>Purchase Date</th>
+                                <th>Physical Copy</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Title)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SystemName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Price)
+                                    </td>
+                                    <td>
+                                        @item.DateOfPurchase.Value.ToShortDateString()
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Physical)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+        <script src="@Url.Content("~/Scripts/GraphSetup.js")" type="text/javascript"></script>
+        <script>
+            BarGraphSetup("costBarGraph", "Games Bought by Month($)", ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], costData);
+            PieGraphSetup("consolePie", "Games Bought by Console", systemNames, systemData);
+
+        </script>
+        }

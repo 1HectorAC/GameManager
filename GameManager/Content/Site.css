@@ -59,6 +59,8 @@ textarea {
     color: black;
     box-shadow: 5px 10px 8px #206750;
     border-radius: 8px;
+    margin-top:10px;
+    margin-bottom:10px;
 }
 
 .greenCard {
