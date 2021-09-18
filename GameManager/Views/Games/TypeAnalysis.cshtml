@@ -88,6 +88,50 @@ else
 
         </div>
 
+        <!--Monthly data.-->
+        <div class="col-md-6">
+            <div class="panel panel-default whiteCard" style="margin-top:15px;">
+                <div class="panel-heading" style="text-align:center;line-height:.8">
+                    <h3 style="margin:0px;">Played Games Data by Month</h3>
+                </div>
+
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Count</th>
+                                <th>Borrowed</th>
+                                <th>Replayed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < @ViewBag.Months.Length; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        @ViewBag.Months[i]
+                                    </td>
+                                    <td>
+                                        @ViewBag.MonthlyCount[i]
+                                    </td>
+                                    <td>
+                                        @ViewBag.BorrowedMonthlyCount[i]
+                                    </td>
+                                    <td>
+                                        @ViewBag.ReplayedMonthlyCount[i]
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+
         <!--Game Console pie chart.-->
         <div class="col-md-6">
             <!--Setup system name and data for chart.-->
@@ -110,40 +154,6 @@ else
 
         </div>
 
-
-
-        <!--Monthly Count numbers.-->
-        <div class="col-md-6">
-            <div class="whiteCard " style="padding:10px; margin-top:5px;line-height:12px">
-                <h3 class="text-center">Games Played by Month</h3>
-                <div class="col-md-3">
-                    @for (int i = 0; i < 6; i++)
-                    {
-                        <p class="text-right"><b>@ViewBag.Months[i]</b></p>
-                    }
-                </div>
-                <div class="col-md-3">
-                    @for (int i = 0; i < 6; i++)
-                    {
-                        <p>@ViewBag.MonthlyCount[i]</p>
-                    }
-                </div>
-                <div class="col-md-3">
-                    @for (int i = 6; i < 12; i++)
-                    {
-                        <p class="text-right"><b>@ViewBag.Months[i]</b></p>
-                    }
-                </div>
-                <div class="col-md-3">
-                    @for (int i = 6; i < 12; i++)
-                    {
-                        <p>@ViewBag.MonthlyCount[i]</p>
-                    }
-                </div>
-
-                <p style="color:#f7f7f7; margin:0px; padding:0px">a</p>
-            </div>
-        </div>
 
 
         <!--Game list display.-->

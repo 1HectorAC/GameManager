@@ -381,13 +381,23 @@ namespace GameManager.Controllers
             ViewBag.SelectSystemName = new SelectList(gamesList.Select(g => g.SystemName).Distinct());
 
             int[] monthlyCount = new int[12];
-            // Setup values for montlyCount
+            int[] borrowedMonthlyCount = new int[12];
+            int[] replayedMonthlyCount = new int[12];
+
+            // Setup values for monthly data.
             foreach (Game g in gamesList.ToList())
             {
                 monthlyCount[g.DatePlayed.Value.Month - 1] += 1;
+                if(g.Borrowed == true)
+                    borrowedMonthlyCount[g.DatePlayed.Value.Month - 1] += 1;
+                if (g.Replayed == true)
+                    replayedMonthlyCount[g.DatePlayed.Value.Month - 1] += 1;
             }
             ViewBag.MonthlyCount = monthlyCount;
+            ViewBag.BorrowedMonthlyCount = borrowedMonthlyCount;
+            ViewBag.ReplayedMonthlyCount = replayedMonthlyCount;
             ViewBag.Months = new string[] { "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+
 
             return View();
         }
