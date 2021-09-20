@@ -5,53 +5,65 @@
 @if (Request.IsAuthenticated)
 {
 
-<div class="row">
-    <div class="col-md-12" style="text-align:center">
-        <div class="whiteCard" style="margin-top: 10px; padding:5px">
-            <h3>Games List</h3>
-            <hr class="greenLine" />
-            <p>
-                View, Add, Delete, and Edit games in your games list here.
+    <div class="row">
+        <div class="col-md-12" style="text-align:center">
 
-            </p>
-            <p><a class="btn customButton" href="/Games/Index">Go to List &raquo;</a></p>
-        </div>
-    </div>
+            <div class="whiteCard" style="margin-top: 10px; padding:5px">
+                <h2>Games List</h2>
+                <hr class="greenLine" />
+                <p>
+                    View, Add, Delete, and Edit games in your games list here.
 
-    <div class="col-md-4" style="text-align:center;">
-        <div class="greenCard" style="margin-top: 18px;">
-            <h3 class="whiteText">Money by Year Analysis</h3>
-            <hr class="whiteLine" />
-            <p class="whiteText">
-                Analyze how money was spent on games in a given year. You can look how money was spent each month as well as the number of games that contributed to it. You can also view the total spent spent overall and more.
-            </p>
-            <p><a class="btn customButton2" href="/Games/MoneyAnalysis">Go to Money Analysis &raquo;</a></p>
+                </p>
+                <p><a class="btn customButton" href="/Games/Index">Go to List </a></p>
+            </div>
         </div>
-    </div>
-    <div class="col-md-4" style="text-align:center">
-        <div class="greenCard" style="margin-top: 18px;">
-            <h3 class="whiteText">Type by Year Analysis</h3>
-            <hr class="whiteLine" />
-            <p class="whiteText">
-                Analyze types of games played in a given year. You can look at things like the number of games borrowed, replayed, physical/digital copies played, the number played of a specific game console and more.
-            </p>
-            <p><a class="btn customButton2" href="/Games/TypeAnalysis">Go to Type Analysis &raquo;</a></p>
+
+        <div class="col-md-4" style="text-align:center;">
+            <div class="greenCard" style="margin-top: 18px;">
+                <h2 class="whiteText">Buy Report</h2>
+                <hr class="whiteLine" />
+                <h4 class="whiteText">
+                    Get yearly data on games bought.
+                    @*<a style="color:white" data-toggle="collapse" data-target="#buyDrop">>></a>*@
+                </h4>
+                @*
+                    <div id="buyDrop" class="collapse whiteText">
+                        <p></p>
+                    </div>
+                *@
+                <p><a class="btn customButton2" href="/Games/MoneyAnalysis">Enter</a></p>
+            </div>
         </div>
-    </div>
-    <div class="col-md-4" style="text-align:center">
-        <div class="greenCard" style="margin-top: 18px;">
-            <h3 class="whiteText">Across Year Analysis</h3>
-            <hr class="whiteLine" />
-            <p class="whiteText">
-                Analyze money or type across multiple years. This is not as indepth as a by year analysis but provided a nice proder picture of things. 
-            </p>
-            <br />
-            <p>Coming Soon...</p>
-            @*
-            <p><a class="btn customButton2" href="/Games/TypeAnalysis" disabled>Go to Across Year Analysis &raquo;</a></p>*@
+
+        <div class="col-md-4" style="text-align:center">
+            <div class="greenCard" style="margin-top: 18px;">
+                <h2 class="whiteText">Years Report</h2>
+                <hr class="whiteLine" />
+                <h4 class="whiteText">
+                    Get across year game data.
+                </h4>
+
+                <p>Coming Soon...</p>
+                @*
+                    <p><a class="btn customButton2" href="/Games/TypeAnalysis" disabled>Enter &raquo;</a></p>*@
+            </div>
         </div>
+
+        <div class="col-md-4" style="text-align:center">
+            <div class="greenCard" style="margin-top: 18px;">
+                <h2 class="whiteText">Play Report</h2>
+                <hr class="whiteLine" />
+                <h4 class="whiteText">
+                    Get yearly data on games played.
+                </h4>
+                <p><a class="btn customButton2" href="/Games/TypeAnalysis">Enter</a></p>
+            </div>
+        </div>
+
+
+
     </div>
-</div>
 }
 else
 {
