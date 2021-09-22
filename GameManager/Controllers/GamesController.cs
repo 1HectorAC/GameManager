@@ -234,7 +234,7 @@ namespace GameManager.Controllers
         {
             // Years list setup for dropdown. Years depend on the when(years) the user has played games.
             var gamesList = GetUserGamesList(User.Identity.GetUserId());
-            var yearsList = gamesList.Where(g => g.DateOfPurchase != null).Select(g => g.DateOfPurchase.Value.Year ).Distinct();
+            var yearsList = gamesList.Where(g => g.DateOfPurchase != null).Select(g => g.DateOfPurchase.Value.Year).Distinct();
             ViewBag.SelectYear = new SelectList(yearsList);
 
             return View();
@@ -270,7 +270,7 @@ namespace GameManager.Controllers
             ViewBag.DigitalTotal = ViewBag.TotalGames - ViewBag.PhysicalTotal;
 
             // Get Average amount spent per game.
-            ViewBag.AverageSpentPerGame = Math.Round((decimal) (ViewBag.TotalSpent / ViewBag.TotalGames));
+            ViewBag.AverageSpentPerGame = Math.Round((decimal)(ViewBag.TotalSpent / ViewBag.TotalGames));
 
             int[] monthlyCost = new int[12];
             int[] monthlyCount = new int[12];
@@ -284,9 +284,9 @@ namespace GameManager.Controllers
                 // Increment cost and count.
                 monthlyCost[g.DateOfPurchase.Value.Month - 1] += (int)g.Price;
                 monthlyCount[g.DateOfPurchase.Value.Month - 1] += 1;
-                
+
                 // Increment montlyPhysicalCount or monthlyDigitalCount.
-                if(g.Physical == true)
+                if (g.Physical == true)
                     monthlyPhysicalCount[g.DateOfPurchase.Value.Month - 1] += 1;
                 else
                     monthlyDigitalCount[g.DateOfPurchase.Value.Month - 1] += 1;
@@ -298,7 +298,7 @@ namespace GameManager.Controllers
                 else if (gameCost >= 100)
                     priceRange[9]++;
                 else
-                    priceRange[(int)Math.Floor(gameCost/10)-1]++;
+                    priceRange[(int)Math.Floor(gameCost / 10) - 1]++;
                 index++;
             }
             ViewBag.MonthlyCost = monthlyCost;
@@ -357,7 +357,7 @@ namespace GameManager.Controllers
 
             // Get list of games based off selected year.
             var gamesList = GetUserGamesList(User.Identity.GetUserId());
-            gamesList = gamesList.Where(g=>g.DatePlayed != null && g.DatePlayed.Value.Year == SelectYear).OrderByDescending(g => g.DatePlayed);
+            gamesList = gamesList.Where(g => g.DatePlayed != null && g.DatePlayed.Value.Year == SelectYear).OrderByDescending(g => g.DatePlayed);
 
             ViewBag.Count = gamesList.Count();
 
@@ -368,11 +368,11 @@ namespace GameManager.Controllers
             ViewBag.Digital = gamesList.Where(g => g.Physical != true).Count();
 
             // Get GameSystem count and names arrays.
-            var systemNames = gamesList.Select(g=>g.SystemName).Distinct().ToArray();
+            var systemNames = gamesList.Select(g => g.SystemName).Distinct().ToArray();
             int[] systemCounts = new int[systemNames.Length];
-            foreach(string x in gamesList.Select(g => g.SystemName))
+            foreach (string x in gamesList.Select(g => g.SystemName))
             {
-                systemCounts[Array.FindIndex(systemNames,g => g == x) ] += 1;
+                systemCounts[Array.FindIndex(systemNames, g => g == x)] += 1;
             }
             ViewBag.SystemNames = systemNames;
             ViewBag.SystemCounts = systemCounts;
@@ -390,7 +390,7 @@ namespace GameManager.Controllers
             foreach (Game g in gamesList.ToList())
             {
                 monthlyCount[g.DatePlayed.Value.Month - 1] += 1;
-                if(g.Borrowed == true)
+                if (g.Borrowed == true)
                     borrowedMonthlyCount[g.DatePlayed.Value.Month - 1] += 1;
                 if (g.Replayed == true)
                     replayedMonthlyCount[g.DatePlayed.Value.Month - 1] += 1;
@@ -409,6 +409,98 @@ namespace GameManager.Controllers
 
             return View();
         }
+
+        /// <summary>
+        /// Get Across Years Analysis view.
+        /// </summary>
+        /// <returns>A View. </returns>
+        [Authorize]
+        public ActionResult AcrossYearsAnalysis()
+        {
+            var option = (Request.QueryString["option"]);
+            // Check for current option choice.
+            if (option == "Buy" || option == "Play")
+            {
+
+                var gamesList = GetUserGamesList(User.Identity.GetUserId());
+
+                // Variable for webpage.
+                List<int> yearsList = new List<int>();
+                List<string> variableTitles = new List<string>();
+                List<List<string>> variableValues = new List<List<string>>();
+
+
+                // Setup Items based on if buy or play option.
+                if (option == "Buy")
+                {
+                    // Setup titles for variables.
+                    variableTitles = new List<string> { "Total Spent", "Total Bought", "Average Spent/Game", "Physical/Digital" };
+
+                    // Setup data.
+                    var data = gamesList.Where(g => g.DateOfPurchase != null && g.Price != null).GroupBy(g => g.DateOfPurchase.Value.Year).Select(g => new
+                    {
+                        g.Key,
+                        totalSpent = g.Sum(g2 => g2.Price),
+                        totalBought = g.Count(),
+                        totalPhysical = g.Count(g2 => g2.Physical == true)
+                    });
+
+                    foreach (var x in data)
+                    {
+                        yearsList.Add(x.Key);
+
+                        var avg = (int)Math.Round((decimal)(x.totalSpent / x.totalBought));
+                        var digital = x.totalBought - x.totalPhysical;
+
+                        variableValues.Add(new List<string> {
+                            "$"+x.totalSpent,
+                            x.totalBought.ToString(),
+                            "$"+ avg,
+                            x.totalPhysical+"-"+ digital});
+                    }
+                }
+                else
+                {
+                    // Setup titles for variables.
+                    variableTitles = new List<string> { "Total Played", "Total Borrowed", " Total Replayed", "Physical/Digital" };
+
+                    // Setup data.
+                    var data = gamesList.Where(g => g.DatePlayed != null).GroupBy(g => g.DatePlayed.Value.Year).Select(g => new
+                    {
+                        g.Key,
+                        totalPlayed = g.Count(),
+                        totalBorrowed = g.Count(g2 => g2.Borrowed == true),
+                        totalReplayed = g.Count(g2 => g2.Replayed == true),
+                        totalPhysical = g.Count(g2 => g2.Physical == true)
+                    });
+
+                    foreach (var x in data)
+                    {
+                        yearsList.Add(x.Key);
+
+                        var digital = x.totalPlayed - x.totalPhysical;
+
+                        variableValues.Add(new List<string> {
+                            x.totalPlayed.ToString(),
+                            x.totalBorrowed.ToString(),
+                            x.totalReplayed.ToString(),
+                            x.totalPhysical+"-"+ digital});
+
+                    }
+                }
+
+                // Setup viewbag variables.
+                ViewBag.Option = option;
+                ViewBag.YearsList = yearsList;
+                ViewBag.VariableTitles = variableTitles;
+                ViewBag.VariableValues = variableValues;
+            }
+
+
+            return View();
+        }
+
+
 
         /// <summary>
         /// Get Some Game variables for a specific type of games.
@@ -454,26 +546,27 @@ namespace GameManager.Controllers
                 gamesList = gamesList.Where(g => g.SystemName == SelectSystemName);
             }
 
-            var data = new {
+            var data = new
+            {
                 Title = title,
                 TitleList = gamesList.Select(g => g.Title).ToArray(),
                 DateList = gamesList.AsEnumerable().Select(g => g.DatePlayed.Value.ToString("MM/dd/yy")).ToArray(),
                 SystemList = gamesList.Select(g => g.SystemName).ToArray()
             };
-            
+
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-            /// <summary>
-            /// Function used to get a users games list.
-            /// </summary>
-            /// <param name="AspNetUserId">An id connected to a user. </param>
-            /// <returns>A list of games.</returns>
-            private IQueryable<Game> GetUserGamesList(string AspNetUserId)
+        /// <summary>
+        /// Function used to get a users games list.
+        /// </summary>
+        /// <param name="AspNetUserId">An id connected to a user. </param>
+        /// <returns>A list of games.</returns>
+        private IQueryable<Game> GetUserGamesList(string AspNetUserId)
         {
             int userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
             return db.Games.Where(g => g.UserId == userId);
         }
-        
+
     }
 }
