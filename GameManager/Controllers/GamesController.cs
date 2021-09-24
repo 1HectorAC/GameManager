@@ -428,6 +428,8 @@ namespace GameManager.Controllers
                 List<int> yearsList = new List<int>();
                 List<string> variableTitles = new List<string>();
                 List<List<string>> variableValues = new List<List<string>>();
+                List<List<string>> systemTitles = new List<List<string>>();
+                List<List<int>> systemValues = new List<List<int>>();
 
 
                 // Setup Items based on if buy or play option.
@@ -442,6 +444,7 @@ namespace GameManager.Controllers
                         g.Key,
                         totalSpent = g.Sum(g2 => g2.Price),
                         totalBought = g.Count(),
+                        avg = Math.Round((decimal)g.Sum(g2 => g2.Price) / g.Count()),
                         totalPhysical = g.Count(g2 => g2.Physical == true)
                     });
 
@@ -457,7 +460,24 @@ namespace GameManager.Controllers
                             x.totalBought.ToString(),
                             "$"+ avg,
                             x.totalPhysical+"-"+ digital});
-                    }
+                    };
+                    
+                    // Setup for system Info.
+                    var systemInfo = gamesList.Where(g => g.DateOfPurchase != null).GroupBy(g => g.DateOfPurchase.Value.Year).Select(g => new {g.Key, SystemData = g.GroupBy(g2 => g2.SystemName).Select(g3 => new { g3.Key, total = g3.Count() }) }).Select(x => x.SystemData).ToList();
+                    
+                    foreach(var x in systemInfo)
+                    {
+                        List<string> sTitles = new List<string>();
+                        List<int> sValue = new List<int>();
+                        foreach (var y in x)
+                        {
+                            sTitles.Add(y.Key);
+                            sValue.Add(y.total);
+                        }
+                        systemTitles.Add(sTitles);
+                        systemValues.Add(sValue);
+                    };
+
                 }
                 else
                 {
@@ -487,6 +507,22 @@ namespace GameManager.Controllers
                             x.totalPhysical+"-"+ digital});
 
                     }
+
+                    // Setup for system Info.
+                    var systemInfo = gamesList.Where(g => g.DatePlayed != null).GroupBy(g => g.DatePlayed.Value.Year).Select(g => new { g.Key, SystemData = g.GroupBy(g2 => g2.SystemName).Select(g3 => new { g3.Key, total = g3.Count() }) }).Select(x => x.SystemData).ToList();
+
+                    foreach (var x in systemInfo)
+                    {
+                        List<string> sTitles = new List<string>();
+                        List<int> sValue = new List<int>();
+                        foreach (var y in x)
+                        {
+                            sTitles.Add(y.Key);
+                            sValue.Add(y.total);
+                        }
+                        systemTitles.Add(sTitles);
+                        systemValues.Add(sValue);
+                    };
                 }
 
                 // Setup viewbag variables.
@@ -494,6 +530,8 @@ namespace GameManager.Controllers
                 ViewBag.YearsList = yearsList;
                 ViewBag.VariableTitles = variableTitles;
                 ViewBag.VariableValues = variableValues;
+                ViewBag.SystemTitles = systemTitles;
+                ViewBag.SystemValues = systemValues;
             }
 
 
