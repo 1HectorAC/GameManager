@@ -24,7 +24,7 @@ namespace GameManager.Controllers
         {
             // Get list of game just by the user.
             var AspNetUserId = User.Identity.GetUserId();
-            var games = db.Games.Where(g => g.GameUser.AspNetUserId == AspNetUserId);
+            var games = db.Games.Where(g => g.GameUser.AspNetUserId == AspNetUserId).OrderBy(g => g.Title);
             return View(games.ToList());
         }
 
