@@ -166,22 +166,26 @@ else
                     <div class="text-center" id="searchType" style="margin: 0 auto">
                         <form name="type_Form" id="type_Form" action="">
                             <input data-val="true" id="Year" name="Year" type="hidden" value=@ViewBag.Year />
-                            <h4>Select Search Type</h4>
+                            <input data-val="true" id="BuyCheck" name="BuyCheck" type="hidden" value="false" />
+                            <h4>Select Filter Type</h4>
                             <div class="btn-group btn-group-toggle " data-toggle="buttons">
                                 <label class="btn btn-primary active notConsoleButton">
-                                    <input type="radio" name="Type" id="option1" value="1" autocomplete="off" checked> Borrowed
+                                    <input type="radio" name="Type" id="option0" value="All" autocomplete="off" checked> All
                                 </label>
                                 <label class="btn btn-primary notConsoleButton">
-                                    <input type="radio" name="Type" id="option2" value="2" autocomplete="off"> Replayed
+                                    <input type="radio" name="Type" id="option1" value="Borrowed" autocomplete="off" checked> Borrowed
                                 </label>
                                 <label class="btn btn-primary notConsoleButton">
-                                    <input type="radio" name="Type" id="option3" value="3" autocomplete="off"> Physical Copy
+                                    <input type="radio" name="Type" id="option2" value="Replayed" autocomplete="off"> Replayed
                                 </label>
                                 <label class="btn btn-primary notConsoleButton">
-                                    <input type="radio" name="Type" id="option4" value="4" autocomplete="off"> Digital Copy
+                                    <input type="radio" name="Type" id="option3" value="Physical" autocomplete="off"> Physical Copy
+                                </label>
+                                <label class="btn btn-primary notConsoleButton">
+                                    <input type="radio" name="Type" id="option4" value="Digital" autocomplete="off"> Digital Copy
                                 </label>
                                 <label class="btn btn-primary" id="consoleButton">
-                                    <input type="radio" name="Type" id="option5" value="5" autocomplete="off"> Console
+                                    <input type="radio" name="Type" id="option5" value="Console" autocomplete="off"> Console
                                 </label>
                             </div>
                             <div id="consoleSection" hidden>

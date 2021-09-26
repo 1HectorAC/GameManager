@@ -541,54 +541,69 @@ namespace GameManager.Controllers
 
 
         /// <summary>
-        /// Get Some Game variables for a specific type of games.
+        /// Get a filtered games list.
         /// </summary>
         /// <param name="Year"> Only games of the given year will be returned.</param>
+        ///  <param name="BuyCheck"> Check if looking at bought games or played.</param>
         /// <param name="Type"> The type of games to filter. </param>
         /// <param name="SelectSystemName"> The systemName that will be filted if needed.</param>
         /// <returns> A JsonResult with games data. </returns>
         [Authorize]
         [HttpPost]
-        public JsonResult GameTypeList(int Year, int Type, string SelectSystemName)
+        public JsonResult GameTypeList(int Year,bool BuyCheck, string Type, string SelectSystemName)
         {
             // Get list of games based off selected year.
             var gamesList = GetUserGamesList(User.Identity.GetUserId());
-            gamesList = gamesList.Where(g => g.DatePlayed != null && g.DatePlayed.Value.Year == Year).OrderByDescending(g => g.DatePlayed);
+            Array dateList;
+            if (BuyCheck == true)
+            {
+                gamesList = gamesList.Where(g => g.DateOfPurchase != null && g.DateOfPurchase.Value.Year == Year).OrderByDescending(g => g.DateOfPurchase);
+                dateList = gamesList.AsEnumerable().Select(g => g.DateOfPurchase.Value.ToString("MM/dd/yy")).ToArray();
+            }
+            else
+            {
+                gamesList = gamesList.Where(g => g.DatePlayed != null && g.DatePlayed.Value.Year == Year).OrderByDescending(g => g.DatePlayed);
+                dateList = gamesList.AsEnumerable().Select(g => g.DatePlayed.Value.ToString("MM/dd/yy")).ToArray();
+            }
 
             var title = "";
 
             // Filter gamesList based on selected type.
-            if (Type == 1)
+            if (Type == "borrowed")
             {
                 title = "Borrowed";
                 gamesList = gamesList.Where(g => g.Borrowed == true);
             }
-            if (Type == 2)
+            if (Type == "Replayed")
             {
                 title = "Replayed";
                 gamesList = gamesList.Where(g => g.Replayed == true);
             }
-            if (Type == 3)
+            if (Type == "Physical")
             {
                 title = "Physical Copy";
                 gamesList = gamesList.Where(g => g.Physical == true);
             }
-            if (Type == 4)
+            if (Type == "Digital")
             {
                 title = "Digital Copy";
                 gamesList = gamesList.Where(g => g.Physical != true);
             }
-            if (Type == 5)
+            if (Type == "Console")
             {
                 title = "Console(" + SelectSystemName + ")";
                 gamesList = gamesList.Where(g => g.SystemName == SelectSystemName);
+            }
+            else
+            {
+                title = "All Games";
             }
 
             var data = new
             {
                 Title = title,
                 TitleList = gamesList.Select(g => g.Title).ToArray(),
-                DateList = gamesList.AsEnumerable().Select(g => g.DatePlayed.Value.ToString("MM/dd/yy")).ToArray(),
+                DateList = dateList,
                 SystemList = gamesList.Select(g => g.SystemName).ToArray()
             };
 
