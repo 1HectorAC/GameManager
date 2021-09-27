@@ -27,12 +27,17 @@ function AddGamesList(data) {
     var titleList = data['TitleList']
     var dateList = data['DateList']
     var systemList = data['SystemList']
+    var priceList = data['PriceList']
 
     $("#tableTitle").text(title + " List");
+
+    var buyCheck = ((priceList.length > 0) ? true : false);
 
     for (i = 0; i < titleList.length; i++) {
         var dataRow = $('<tr>');
         dataRow.append("<td>" + titleList[i] + "</td>");
+        if (buyCheck)
+            dataRow.append("<td>" + priceList[i] + "</td>");
         dataRow.append("<td>" + dateList[i] + "</td>");
         dataRow.append("<td>" + systemList[i] + "</td>");
         

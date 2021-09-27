@@ -113,7 +113,7 @@ else
             <div class="col-md-4">
                 <div class="whiteCard" style="padding:5px; font-size:16px; line-height:14px">
                     <h3 class="text-center">Price Range Analysis</h3>
-                    <hr class="greenLine"/>
+                    <hr class="greenLine" />
                     <br />
                     <div class="col-md-6">
                         @for (int i = 0; i < 10; i++)
@@ -127,7 +127,7 @@ else
                             <p class="text-left">@ViewBag.PriceRange[i]</p>
                         }
                     </div>
-                    
+
 
                     <p style="color:#f7f7f7; margin:0px; padding:0px">a</p>
                 </div>
@@ -143,7 +143,7 @@ else
                     <h3 style="margin:0px;">Physical/Digital by Month</h3>
                 </div>
 
-                <div class="panel-body" >
+                <div class="panel-body">
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -153,7 +153,7 @@ else
                                 <th>Digital</th>
                             </tr>
                         </thead>
-                        <tbody >
+                        <tbody>
                             @for (int i = 0; i < @ViewBag.Months.Length; i++)
                             {
                                 <tr>
@@ -180,56 +180,81 @@ else
 
 
         <!--Display game details.-->
+        <!--Game list display.-->
         <div class="col-md-12">
-            <div class="panel panel-default whiteCard" style="margin-top:15px;">
-                <div class="panel-heading" style="text-align:center;line-height:.8">
-                    <h3 style="margin:0px;">Games Purchased</h3>
+            <div class="panel panel-default whiteCard" style="margin-top:10px;">
+                <div class="panel-heading text-center" style="line-height:.8;">
+                    <h3 style="margin:0px;">Games List</h3>
                 </div>
 
                 <div class="panel-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Console</th>
-                                <th>Price</th>
-                                <th>Purchase Date</th>
-                                <th>Physical Copy</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Title)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.SystemName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Price)
-                                    </td>
-                                    <td>
-                                        @item.DateOfPurchase.Value.ToShortDateString()
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Physical)
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
 
+                    <div class="text-center" id="searchType" style="margin: 0 auto">
+                        <form name="type_Form" id="type_Form" action="">
+                            <input data-val="true" id="Year" name="Year" type="hidden" value=@ViewBag.Year />
+                            <input data-val="true" id="BuyCheck" name="BuyCheck" type="hidden" value="true" />
+                            <h4>Select Filter Type</h4>
+                            <div class="btn-group btn-group-toggle " data-toggle="buttons">
+                                <label class="btn btn-primary active notConsoleButton">
+                                    <input type="radio" name="Type" id="option0" value="All" autocomplete="off" checked> All
+                                </label>
+                                <label class="btn btn-primary notConsoleButton">
+                                    <input type="radio" name="Type" id="option3" value="Physical" autocomplete="off"> Physical Copy
+                                </label>
+                                <label class="btn btn-primary notConsoleButton">
+                                    <input type="radio" name="Type" id="option4" value="Digital" autocomplete="off"> Digital Copy
+                                </label>
+                                <label class="btn btn-primary" id="consoleButton">
+                                    <input type="radio" name="Type" id="option5" value="Console" autocomplete="off"> Console
+                                </label>
+                            </div>
+                            <div id="consoleSection" hidden>
+                                <h4>Select Console</h4>
+                                <label class="control-label" for="SelectSystemName" hidden>Select System</label>
+                                @Html.DropDownList("SelectSystemName", null, htmlAttributes: new { @class = "form-control btn btn-primary", @style = "width: 100px; display:inline-block" })
+                                <span class="field-validation-valid text-danger" data-valmsg-for="SelectSystemName" data-valmsg-replace="true"></span>
+                            </div>
+                            <br /><br />
+                            <input type="submit" value="Enter" class="btn customButton" />
+                        </form>
+                    </div>
+
+                    <!-- Type table setup. -->
+                    <div id="typeTable" hidden>
+                        <h3 id="tableTitle" style="text-align:center; color:#45c687"></h3>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Price($)</th>
+                                    <th>Date Bought</th>
+                                    <th>Console</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="displayType"></tbody>
+                        </table>
+
+                        <!--Button to reset type search. -->
+                        <input id="resetSearch" class="btn customButton" type="button" value="New  Type Search" onclick="ShowInput();" />
+                    </div>
+                </div>
+
+            </div>
         </div>
+
+
     </div>
 
-        <script src="@Url.Content("~/Scripts/GraphSetup.js")" type="text/javascript"></script>
-        <script>
-            BarGraphSetup("costBarGraph", "Games Bought by Month($)", ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], costData);
-            PieGraphSetup("consolePie", "Games Bought by Console", systemNames, systemData);
+    <script src="@Url.Content("~/Scripts/GraphSetup.js")" type="text/javascript"></script>
+    <script>
+        BarGraphSetup("costBarGraph", "Money Spent by Month($)", ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], costData);
+        PieGraphSetup("consolePie", "Games Bought by Console", systemNames, systemData);
 
-        </script>
-        }
+    </script>
+}
+
+
+@section PageScripts{
+    <script type="text/javascript" src="~/Scripts/GamesType.js"></script>
+}

@@ -318,11 +318,13 @@ namespace GameManager.Controllers
             ViewBag.SystemNames = systemNames;
             ViewBag.SystemCounts = systemCounts;
 
+            // Make selection list for systems currently bought for a drop down.
+            ViewBag.SelectSystemName = new SelectList(gamesListOfYear.Select(g => g.SystemName).Distinct());
 
             ViewBag.Months = new string[] { "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
             ViewBag.PriceLabels = new string[] { "<$20", "$20-$29", "$30-$39", "$40-$49", "$50-$59", "$60-$69", "$70-$79", "$80-$89", "$90-$99", ">$100" };
 
-            return View(gamesListOfYear);
+            return View();
         }
 
         /// <summary>
@@ -554,42 +556,43 @@ namespace GameManager.Controllers
         {
             // Get list of games based off selected year.
             var gamesList = GetUserGamesList(User.Identity.GetUserId());
-            Array dateList;
+            List<int?> priceList;
+            List<string> dateList;
             if (BuyCheck == true)
             {
                 gamesList = gamesList.Where(g => g.DateOfPurchase != null && g.DateOfPurchase.Value.Year == Year).OrderByDescending(g => g.DateOfPurchase);
-                dateList = gamesList.AsEnumerable().Select(g => g.DateOfPurchase.Value.ToString("MM/dd/yy")).ToArray();
+                dateList = gamesList.AsEnumerable().Select(g => g.DateOfPurchase.Value.ToString("MM/dd/yy")).ToList();
             }
             else
             {
                 gamesList = gamesList.Where(g => g.DatePlayed != null && g.DatePlayed.Value.Year == Year).OrderByDescending(g => g.DatePlayed);
-                dateList = gamesList.AsEnumerable().Select(g => g.DatePlayed.Value.ToString("MM/dd/yy")).ToArray();
+                dateList = gamesList.AsEnumerable().Select(g => g.DatePlayed.Value.ToString("MM/dd/yy")).ToList();
             }
 
             var title = "";
 
             // Filter gamesList based on selected type.
-            if (Type == "borrowed")
+            if (Type == "Borrowed")
             {
                 title = "Borrowed";
                 gamesList = gamesList.Where(g => g.Borrowed == true);
             }
-            if (Type == "Replayed")
+            else if (Type == "Replayed")
             {
                 title = "Replayed";
                 gamesList = gamesList.Where(g => g.Replayed == true);
             }
-            if (Type == "Physical")
+            else if (Type == "Physical")
             {
                 title = "Physical Copy";
                 gamesList = gamesList.Where(g => g.Physical == true);
             }
-            if (Type == "Digital")
+            else if (Type == "Digital")
             {
                 title = "Digital Copy";
                 gamesList = gamesList.Where(g => g.Physical != true);
             }
-            if (Type == "Console")
+            else if (Type == "Console")
             {
                 title = "Console(" + SelectSystemName + ")";
                 gamesList = gamesList.Where(g => g.SystemName == SelectSystemName);
@@ -598,13 +601,20 @@ namespace GameManager.Controllers
             {
                 title = "All Games";
             }
+            
+            // Add to priceList if actually using bought games.
+            if (BuyCheck)
+                priceList = gamesList.Select(g => g.Price).ToList();
+            else
+                priceList = new List<int?> {};
 
             var data = new
             {
                 Title = title,
-                TitleList = gamesList.Select(g => g.Title).ToArray(),
+                TitleList = gamesList.Select(g => g.Title).ToList(),
                 DateList = dateList,
-                SystemList = gamesList.Select(g => g.SystemName).ToArray()
+                SystemList = gamesList.Select(g => g.SystemName).ToList(),
+                PriceList = priceList
             };
 
             return Json(data, JsonRequestBehavior.AllowGet);
