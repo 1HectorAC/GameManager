@@ -69,6 +69,8 @@ textarea {
     padding: 7px;
     background-color: #05665b;
     box-shadow: 5px 10px 8px #206750;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .greenLine {

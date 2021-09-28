@@ -4,27 +4,18 @@
 
 @if (Request.IsAuthenticated)
 {
-
+    <div class="text-center whiteCard jumbotron" style=" padding:15px;">
+        <h1 style="color:#20785C"><b>Game Manager</b></h1>
+        <h4><i>Analyze your video game spending and playing habits here.</i></h4>
+    </div>
     <div class="row">
-        <div class="col-md-12" style="text-align:center">
-
-            <div class="whiteCard" style="margin-top: 10px; padding:5px">
-                <h2>Games List</h2>
-                <hr class="greenLine" />
-                <p>
-                    View, Add, Delete, and Edit games in your games list here.
-
-                </p>
-                <p><a class="btn customButton" href="/Games/Index">Go to List </a></p>
-            </div>
-        </div>
 
         <div class="col-md-4" style="text-align:center;">
-            <div class="greenCard" style="margin-top: 18px;">
+            <div class="greenCard">
                 <h2 class="whiteText">Buy Report</h2>
                 <hr class="whiteLine" />
                 <h4 class="whiteText">
-                    Get yearly data on games bought.
+                    <i>Get yearly data on games bought.</i>
                     @*<a style="color:white" data-toggle="collapse" data-target="#buyDrop">>></a>*@
                 </h4>
                 @*
@@ -37,29 +28,39 @@
         </div>
 
         <div class="col-md-4" style="text-align:center">
-            <div class="greenCard" style="margin-top: 18px;">
+            <div class="greenCard">
                 <h2 class="whiteText">Years Report</h2>
                 <hr class="whiteLine" />
                 <h4 class="whiteText">
-                    Get across year game data.
+                    <i>Get across year game data.</i>
                 </h4>
 
-                <p><a class="btn customButton2" href="/Games/AcrossYearsAnalysis"   >Enter &raquo;</a></p>
+                <p><a class="btn customButton2" href="/Games/AcrossYearsAnalysis">Enter</a></p>
             </div>
         </div>
 
         <div class="col-md-4" style="text-align:center">
-            <div class="greenCard" style="margin-top: 18px;">
+            <div class="greenCard">
                 <h2 class="whiteText">Play Report</h2>
                 <hr class="whiteLine" />
                 <h4 class="whiteText">
-                    Get yearly data on games played.
+                    <i>Get yearly data on games played.</i>
                 </h4>
                 <p><a class="btn customButton2" href="/Games/TypeAnalysis">Enter</a></p>
             </div>
         </div>
 
+        <div class="col-md-12" style="text-align:center">
 
+            <div class="whiteCard" style="padding:1px; line-height:5px;background-color:#ddffee">
+                <h2 style="line-height:10px;">Games List</h2>
+                <hr class="greenLine" />
+                <h4>
+                    <i>View, Add, Delete, and Edit games in your games list here.</i>
+                </h4>
+                <p><a class="btn customButton" href="/Games/Index">Go to List </a></p>
+            </div>
+        </div>
 
     </div>
 }
