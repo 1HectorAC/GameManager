@@ -235,7 +235,10 @@ namespace GameManager.Controllers
             // Years list setup for dropdown. Years depend on the when(years) the user has played games.
             var gamesList = GetUserGamesList(User.Identity.GetUserId());
             var yearsList = gamesList.Where(g => g.DateOfPurchase != null).Select(g => g.DateOfPurchase.Value.Year).Distinct();
-            ViewBag.SelectYear = new SelectList(yearsList);
+
+            // yearsList length check.
+            if(yearsList.Count() >= 1)
+                ViewBag.SelectYear = new SelectList(yearsList);
 
             return View();
         }
@@ -249,8 +252,10 @@ namespace GameManager.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult MoneyAnalysis(int SelectYear)
+        public ActionResult MoneyAnalysis(int SelectYear = 0)
         {
+            if (SelectYear <= 0)
+                return View();
             ViewBag.Year = SelectYear;
 
             // Get list of games based off selected year.
