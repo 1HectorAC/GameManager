@@ -237,7 +237,7 @@ namespace GameManager.Controllers
             var yearsList = gamesList.Where(g => g.DateOfPurchase != null).Select(g => g.DateOfPurchase.Value.Year).Distinct();
 
             // yearsList length check.
-            if(yearsList.Count() >= 1)
+            if (yearsList.Count() >= 1)
                 ViewBag.SelectYear = new SelectList(yearsList);
 
             return View();
@@ -341,11 +341,11 @@ namespace GameManager.Controllers
         {
             // Years list setup for dropdown. Years depend on the when(years) the user has played games.
             var gamesList = GetUserGamesList(User.Identity.GetUserId());
-            var yearsList = gamesList.Where(g => g.DatePlayed != null).Select(g => new { Year = g.DatePlayed.Value.Year }).Distinct();
-            ViewBag.SelectYear = new SelectList(yearsList, "Year", "Year");
+            var yearsList = gamesList.Where(g => g.DatePlayed != null).Select(g => g.DatePlayed.Value.Year).Distinct();
 
-            // SystemName list for dropdown.
-            ViewBag.SystemName = new SelectList(db.GameSystems, "Name", "Name");
+            // yearsList length check.
+            if (yearsList.Count() >= 1)
+                ViewBag.SelectYear = new SelectList(yearsList);
 
             return View();
         }
@@ -358,8 +358,10 @@ namespace GameManager.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult TypeAnalysis(int SelectYear)
+        public ActionResult TypeAnalysis(int SelectYear = 0)
         {
+            if (SelectYear < 1)
+                return View();
             ViewBag.Year = SelectYear;
 
             // Get list of games based off selected year.
@@ -468,11 +470,11 @@ namespace GameManager.Controllers
                             "$"+ avg,
                             x.totalPhysical+"-"+ digital});
                     };
-                    
+
                     // Setup for system Info.
-                    var systemInfo = gamesList.Where(g => g.DateOfPurchase != null).GroupBy(g => g.DateOfPurchase.Value.Year).Select(g => new {g.Key, SystemData = g.GroupBy(g2 => g2.SystemName).Select(g3 => new { g3.Key, total = g3.Count() }) }).Select(x => x.SystemData).ToList();
-                    
-                    foreach(var x in systemInfo)
+                    var systemInfo = gamesList.Where(g => g.DateOfPurchase != null).GroupBy(g => g.DateOfPurchase.Value.Year).Select(g => new { g.Key, SystemData = g.GroupBy(g2 => g2.SystemName).Select(g3 => new { g3.Key, total = g3.Count() }) }).Select(x => x.SystemData).ToList();
+
+                    foreach (var x in systemInfo)
                     {
                         List<string> sTitles = new List<string>();
                         List<int> sValue = new List<int>();
@@ -557,7 +559,7 @@ namespace GameManager.Controllers
         /// <returns> A JsonResult with games data. </returns>
         [Authorize]
         [HttpPost]
-        public JsonResult GameTypeList(int Year,bool BuyCheck, string Type, string SelectSystemName)
+        public JsonResult GameTypeList(int Year, bool BuyCheck, string Type, string SelectSystemName)
         {
             // Get list of games based off selected year.
             var gamesList = GetUserGamesList(User.Identity.GetUserId());
@@ -606,12 +608,12 @@ namespace GameManager.Controllers
             {
                 title = "All Games";
             }
-            
+
             // Add to priceList if actually using bought games.
             if (BuyCheck)
                 priceList = gamesList.Select(g => g.Price).ToList();
             else
-                priceList = new List<int?> {};
+                priceList = new List<int?> { };
 
             var data = new
             {
