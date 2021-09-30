@@ -444,6 +444,13 @@ namespace GameManager.Controllers
                 // Setup Items based on if buy or play option.
                 if (option == "Buy")
                 {
+                    //Check if there are bought games.
+                    if (gamesList.Where(g => g.DateOfPurchase != null).FirstOrDefault() == null)
+                    {
+                        ViewBag.ErrorMessage = "You don't have any bought games.";
+                        return View();
+                    }
+
                     // Setup titles for variables.
                     variableTitles = new List<string> { "Total Spent", "Total Bought", "Average Spent/Game", "Physical/Digital" };
 
@@ -490,6 +497,13 @@ namespace GameManager.Controllers
                 }
                 else
                 {
+                    //Check if there are bought games.
+                    if (gamesList.Where(g => g.DatePlayed != null).FirstOrDefault() == null)
+                    {
+                        ViewBag.ErrorMessage = "You don't have any played games.";
+                        return View();
+                    }
+
                     // Setup titles for variables.
                     variableTitles = new List<string> { "Total Played", "Total Borrowed", " Total Replayed", "Physical/Digital" };
 

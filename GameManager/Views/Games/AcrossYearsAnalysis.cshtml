@@ -15,13 +15,6 @@
             <p>Select a type.</p>
             <form action="AcrossYearsAnalysis" method="get">
                 <div class="form-group">
-                    @*
-                        <label class="control-label col-md-3 col-md-offset-1" for="SelectYear">Select Year</label>
-                        <div class="col-md-6">
-                            @Html.DropDownList("SelectYear", null, htmlAttributes: new { @class = "form-control" })
-                            <span class="field-validation-valid text-danger" data-valmsg-for="SelectYear" data-valmsg-replace="true"></span>
-                        </div>*@
-
                     <div class="btn-group btn-group-toggle " data-toggle="buttons">
                         <label class="btn btn-primary active ">
                             <input type="radio" name="option" id="option1" value="Buy" autocomplete="off" checked> Bought
@@ -31,15 +24,19 @@
                         </label>
                     </div>
                 </div>
-
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <p style="color:red">@ViewBag.ErrorMessage</p>
+                }
                 <div class="form-group">
+
                     <div class=" col-md-12">
-                        <br />
+
                         <input type="submit" value="Enter" class="btn customButton" />
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <p>Note: Make sure you have entered games into your games list before moving forwarc. Go to games list @Html.ActionLink("here.", "Index", "Games")</p>
+                    <p>Note: Make sure you have games in your games list before getting a report. Go to games list @Html.ActionLink("here", "Index", "Games") to add games.</p>
                 </div>
             </form>
         </div>
