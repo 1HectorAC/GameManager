@@ -162,7 +162,20 @@ namespace GameManager.Controllers
             int userId = db.GameUsers.Where(g => g.AspNetUserId == AspNetUserId).First().UserId;
             game.UserId = userId;
 
-            if (ModelState.IsValid)
+            // Error checks.
+            if (game.DateOfPurchase == null && game.DatePlayed == null)
+            {
+                ViewBag.ErrorMessage = "One date field is required.";
+            }
+            else if ((game.DateOfPurchase != null && game.Price == null) || (game.DateOfPurchase == null && game.Price != null))
+            {
+                ViewBag.ErrorMessage = "You can't have a date bought with no price and vice versa.";
+            }
+            else if (game.DateOfPurchase != null && game.Borrowed == true)
+            {
+                ViewBag.ErrorMessage = "A game can't have a bought date and be borrowed.";
+            }
+            else if (ModelState.IsValid)
             {
                 db.Entry(game).State = EntityState.Modified;
                 db.SaveChanges();

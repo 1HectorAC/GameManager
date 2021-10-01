@@ -96,7 +96,12 @@
                     <div class="col-md-12">
                         <br />
                         <input type="submit" value="Save" class="btn customButton" />
-                        <p>Note: Title & a date fields are required. Price needs to be a whole number.</p>
+                        <br />
+                        @if (ViewBag.ErrorMessage != null)
+                        {
+                            <p style="color:red">@ViewBag.ErrorMessage</p>
+                        }
+                        <p>Note: Title and one date filed is required. Price needs to be whole number. If you enter a date bought then a price is required and vice versa.</p>
                     </div>
                 </div>
             </div>
