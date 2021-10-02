@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<GameManager.Models.Game>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Games List";
 }
 
 <div class="panel panel-default whiteCard" style="margin-top:15px;">
@@ -12,6 +12,7 @@
             @Html.ActionLink("Add Game", "Create", null, new { @class = "btn customButton" })
         </p>
     </div>
+
 
     <div class="panel-body">
         <table class="table table-striped">
@@ -25,7 +26,7 @@
                         Console
                     </th>
                     <th>
-                        Purchase Date
+                        Date Bought
                     </th>
                     <th>
                         Date Played
@@ -67,6 +68,14 @@
                 }
             </tbody>
         </table>
-    </div>
+        @if (Model.Count() <= 0)
+        {
+            <h3 class="text-center">
+        List is empty.</h3>
+        <h4 class="text-center">You can add games with the button above.</h4>
+        }
+        
+        </div>
+    
 </div>
 
