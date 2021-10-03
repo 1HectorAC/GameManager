@@ -4,79 +4,89 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3 text-center whiteCard">
+        <h2>Game Details</h2>
+        <h4>Look at specfied properties of a game.</h4>
 
-<div>
-    <h4>Game</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
+        <hr class="greenLine" />
+        <br />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Title)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Title)
+            </dd>
 
-        <dt>
-            System Name
-        </dt>
+            <dt>
+                Console
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.GameSystem.Name)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.GameSystem.Name)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Price)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Price)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Price)
+            </dd>
 
-        <dt>
-            Date Purchased
-        </dt>
+            <dt>
+                Date Bought
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.DateOfPurchase)
-        </dd>
+            <dd>
+                @if (Model.DateOfPurchase != null)
+                {
+                    @Model.DateOfPurchase.Value.ToShortDateString()
+                }
+            </dd>
 
-        <dt>
-            Date Played
-        </dt>
+            <dt>
+                Date Played
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.DatePlayed)
-        </dd>
+            <dd>
+                @if (Model.DatePlayed != null)
+                {
+                    @Model.DatePlayed.Value.ToShortDateString()
+                }
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Borrowed)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Borrowed)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Borrowed)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Borrowed)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Physical)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Physical)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Physical)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Physical)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Replayed)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Replayed)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Replayed)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Replayed)
+            </dd>
 
-    </dl>
+        </dl>
+
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
