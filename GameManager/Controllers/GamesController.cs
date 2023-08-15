@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using GameManager.Models;
+using GameManager.Models.ViewModels;
 using Microsoft.AspNet.Identity;
 
 namespace GameManager.Controllers
@@ -288,21 +289,7 @@ namespace GameManager.Controllers
             var gamesList = GetUserGamesList(User.Identity.GetUserId());
             var gamesListOfYear = gamesList.Where(g => g.DateOfPurchase != null && g.Price != null && g.DateOfPurchase.Value.Year == SelectYear).OrderByDescending(g => g.DateOfPurchase);
 
-            // Setup ViewBag of total money spent over selected year.
-            ViewBag.TotalSpent = gamesListOfYear.Sum(g => g.Price);
-
-            // Setup ViewBag of total games played over selected year.
-            ViewBag.TotalGames = gamesListOfYear.Count();
-
-            // Setup View bag of total physical games bought.
-            ViewBag.PhysicalTotal = gamesListOfYear.Where(g => g.Physical == true).Count();
-
-            // Setup View bag of total digital games bought.
-            ViewBag.DigitalTotal = ViewBag.TotalGames - ViewBag.PhysicalTotal;
-
-            // Get Average amount spent per game.
-            ViewBag.AverageSpentPerGame = Math.Round((decimal)(ViewBag.TotalSpent / ViewBag.TotalGames));
-
+            // Setup some array related data for buyData.
             int[] monthlyCost = new int[12];
             int[] monthlyCount = new int[12];
             int[] monthlyPhysicalCount = new int[12];
@@ -317,7 +304,7 @@ namespace GameManager.Controllers
                 monthlyCount[g.DateOfPurchase.Value.Month - 1] += 1;
 
                 // Increment montlyPhysicalCount or monthlyDigitalCount.
-                if (g.Physical == true)
+                if (g.Physical)
                     monthlyPhysicalCount[g.DateOfPurchase.Value.Month - 1] += 1;
                 else
                     monthlyDigitalCount[g.DateOfPurchase.Value.Month - 1] += 1;
@@ -332,30 +319,34 @@ namespace GameManager.Controllers
                     priceRange[(int)Math.Floor(gameCost / 10) - 1]++;
                 index++;
             }
-            ViewBag.MonthlyCost = monthlyCost;
-            ViewBag.MonthlyCount = monthlyCount;
-            ViewBag.PriceRange = priceRange;
-            ViewBag.MonthlyPhysicalCount = monthlyPhysicalCount;
-            ViewBag.MonthlyDigitalCount = monthlyDigitalCount;
 
+            // Make Temporary Variables used for setting up some buyData fields.
+            var totalSpent = (int)gamesListOfYear.Sum(g => g.Price);
+            var totalGames = gamesListOfYear.Count();
+            var systemInfo = gamesListOfYear.GroupBy(c => c.SystemName);
 
-            // Get GameSystem count and names arrays.
-            var systemNames = gamesListOfYear.Select(g => g.SystemName).Distinct().ToArray();
-            int[] systemCounts = new int[systemNames.Length];
-            foreach (string x in gamesListOfYear.Select(g => g.SystemName))
+            // Setup buyData.
+            BuyData buyData = new BuyData
             {
-                systemCounts[Array.FindIndex(systemNames, g => g == x)] += 1;
-            }
-            ViewBag.SystemNames = systemNames;
-            ViewBag.SystemCounts = systemCounts;
+                TotalSpent = totalSpent,
+                TotalGames = totalGames,
+                AverageSpend = (int)Math.Round((decimal)(totalSpent / totalGames)),
+                TotalPhysical = gamesListOfYear.Where(g => g.Physical == true).Count(),
+                TotalDigital = gamesListOfYear.Where(g => g.Physical == false).Count(),
+                MonthlyTotalSpent = monthlyCost,
+                MonthlyTotalGames = monthlyCount,
+                MonthlyTotalPhysical = monthlyPhysicalCount,
+                MonthlyTotalDigital = monthlyDigitalCount,
+                TotalByPriceRange = priceRange,
+                SystemNames = systemInfo.Select(c=>c.Key).ToArray(),
+                SystemCounts = systemInfo.Select(c=>c.Count()).ToArray()
+            };
 
             // Make selection list for systems currently bought for a drop down.
             ViewBag.SelectSystemName = new SelectList(gamesListOfYear.Select(g => g.SystemName).Distinct());
 
-            ViewBag.Months = new string[] { "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
-            ViewBag.PriceLabels = new string[] { "<$20", "$20-$29", "$30-$39", "$40-$49", "$50-$59", "$60-$69", "$70-$79", "$80-$89", "$90-$99", ">$100" };
 
-            return View();
+            return View(buyData);
         }
 
         /// <summary>
