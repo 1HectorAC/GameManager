@@ -289,13 +289,17 @@ namespace GameManager.Controllers
             var gamesList = GetUserGamesList(User.Identity.GetUserId());
             var gamesListOfYear = gamesList.Where(g => g.DateOfPurchase != null && g.Price != null && g.DateOfPurchase.Value.Year == SelectYear).OrderByDescending(g => g.DateOfPurchase);
 
-            // Setup some array related data for buyData.
+            // Make variables for buyData fields.
+            var totalSpent = (int)gamesListOfYear.Sum(g => g.Price);
+            var totalGames = gamesListOfYear.Count();
+            var systemInfo = gamesListOfYear.GroupBy(c => c.SystemName);
             int[] monthlyCost = new int[12];
             int[] monthlyCount = new int[12];
             int[] monthlyPhysicalCount = new int[12];
             int[] monthlyDigitalCount = new int[12];
             int[] priceRange = new int[10];
             int index = 0;
+
             // Setup values for montlyCost, montlyCount, and priceRange
             foreach (Game g in gamesListOfYear.ToList())
             {
@@ -320,11 +324,6 @@ namespace GameManager.Controllers
                 index++;
             }
 
-            // Make Temporary Variables used for setting up some buyData fields.
-            var totalSpent = (int)gamesListOfYear.Sum(g => g.Price);
-            var totalGames = gamesListOfYear.Count();
-            var systemInfo = gamesListOfYear.GroupBy(c => c.SystemName);
-
             // Setup buyData.
             BuyData buyData = new BuyData
             {
@@ -338,13 +337,12 @@ namespace GameManager.Controllers
                 MonthlyTotalPhysical = monthlyPhysicalCount,
                 MonthlyTotalDigital = monthlyDigitalCount,
                 TotalByPriceRange = priceRange,
-                SystemNames = systemInfo.Select(c=>c.Key).ToArray(),
-                SystemCounts = systemInfo.Select(c=>c.Count()).ToArray()
+                SystemNames = systemInfo.Select(c => c.Key).ToArray(),
+                SystemCounts = systemInfo.Select(c => c.Count()).ToArray()
             };
 
             // Make selection list for systems currently bought for a drop down.
             ViewBag.SelectSystemName = new SelectList(gamesListOfYear.Select(g => g.SystemName).Distinct());
-
 
             return View(buyData);
         }
@@ -383,57 +381,47 @@ namespace GameManager.Controllers
 
             // Get list of games based off selected year.
             var gamesList = GetUserGamesList(User.Identity.GetUserId());
-            gamesList = gamesList.Where(g => g.DatePlayed != null && g.DatePlayed.Value.Year == SelectYear).OrderByDescending(g => g.DatePlayed);
+            var gamesListOfYear = gamesList.Where(g => g.DatePlayed != null && g.DatePlayed.Value.Year == SelectYear).OrderByDescending(g => g.DatePlayed);
 
-            ViewBag.Count = gamesList.Count();
-
-            // Get count data of Borrowed, Replayed, Physical, and Digital.
-            ViewBag.Borrowed = gamesList.Where(g => g.Borrowed == true).Count();
-            ViewBag.Replayed = gamesList.Where(g => g.Replayed == true).Count();
-            ViewBag.Physical = gamesList.Where(g => g.Physical == true).Count();
-            ViewBag.Digital = gamesList.Where(g => g.Physical != true).Count();
-
-            // Get GameSystem count and names arrays.
-            var systemNames = gamesList.Select(g => g.SystemName).Distinct().ToArray();
-            int[] systemCounts = new int[systemNames.Length];
-            foreach (string x in gamesList.Select(g => g.SystemName))
-            {
-                systemCounts[Array.FindIndex(systemNames, g => g == x)] += 1;
-            }
-            ViewBag.SystemNames = systemNames;
-            ViewBag.SystemCounts = systemCounts;
-
-            // Make selection list for systems currently played for a drop down
-            ViewBag.SelectSystemName = new SelectList(gamesList.Select(g => g.SystemName).Distinct());
-
-            int[] monthlyCount = new int[12];
-            int[] borrowedMonthlyCount = new int[12];
-            int[] replayedMonthlyCount = new int[12];
-            int[] physicalMonthlyCount = new int[12];
-            int[] digitalMonthlyCount = new int[12];
+            // Make variables for buyData fields.
+            var systemInfo = gamesListOfYear.GroupBy(c => c.SystemName);
+            int[] monthlyTotalPlayed = new int[12];
+            int[] monthlyTotalBorrowed = new int[12];
+            int[] monthlyTotalReplayed = new int[12];
+            int[] monthlyTotalPhysical = new int[12];
+            int[] monthlyTotalDigital = new int[12];
 
             // Setup values for monthly data.
-            foreach (Game g in gamesList.ToList())
+            foreach (Game g in gamesListOfYear.ToList())
             {
-                monthlyCount[g.DatePlayed.Value.Month - 1] += 1;
-                if (g.Borrowed == true)
-                    borrowedMonthlyCount[g.DatePlayed.Value.Month - 1] += 1;
-                if (g.Replayed == true)
-                    replayedMonthlyCount[g.DatePlayed.Value.Month - 1] += 1;
-                if (g.Physical == true)
-                    physicalMonthlyCount[g.DatePlayed.Value.Month - 1] += 1;
+                monthlyTotalPlayed[g.DatePlayed.Value.Month - 1] += 1;
+                if (g.Borrowed)
+                    monthlyTotalBorrowed[g.DatePlayed.Value.Month - 1] += 1;
+                if (g.Replayed)
+                    monthlyTotalReplayed[g.DatePlayed.Value.Month - 1] += 1;
+                if (g.Physical)
+                    monthlyTotalPhysical[g.DatePlayed.Value.Month - 1] += 1;
                 else
-                    digitalMonthlyCount[g.DatePlayed.Value.Month - 1] += 1;
+                    monthlyTotalDigital[g.DatePlayed.Value.Month - 1] += 1;
             }
-            ViewBag.MonthlyCount = monthlyCount;
-            ViewBag.BorrowedMonthlyCount = borrowedMonthlyCount;
-            ViewBag.ReplayedMonthlyCount = replayedMonthlyCount;
-            ViewBag.PhysicalMonthlyCount = physicalMonthlyCount;
-            ViewBag.DigitalMonthlyCount = digitalMonthlyCount;
-            ViewBag.Months = new string[] { "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 
+            var playData = new PlayData
+            {
+                TotalGames = gamesListOfYear.Count(),
+                TotalBorrowed = gamesListOfYear.Where(g => g.Borrowed == true).Count(),
+                TotalReplayed = gamesListOfYear.Where(g => g.Replayed == true).Count(),
+                TotalPhysical = gamesListOfYear.Where(g => g.Physical == true).Count(),
+                TotalDigital = gamesListOfYear.Where(g => g.Physical == false).Count(),
+                MonthlyTotalPlayed = monthlyTotalPlayed,
+                MonthlyTotalBorrowed = monthlyTotalBorrowed,
+                MonthlyTotalReplayed = monthlyTotalReplayed,
+                MonthlyTotalPhysical = monthlyTotalPhysical,
+                MonthlyTotalDigital = monthlyTotalDigital,
+                SystemNames = systemInfo.Select(c => c.Key).ToArray(),
+                SystemCounts = systemInfo.Select(c => c.Count()).ToArray()
+            };
 
-            return View();
+            return View(playData);
         }
 
         /// <summary>
