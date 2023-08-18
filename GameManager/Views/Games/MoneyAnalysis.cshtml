@@ -11,7 +11,7 @@
 {
 
     <div class="row">
-        <div class="col-md-6 col-md-offset-3 whiteCard text-center" style="padding: 10px; margin-top:10px">
+        <div class="col-md-6 col-md-offset-3 whiteCard text-center">
             <h2>Buy Report</h2>
             <hr class="greenLine" />
             <p>Select a year to analyze.</p>
@@ -50,28 +50,28 @@
 }
 else
 {
-    <h2 class="whiteText" style="text-align:center">@ViewBag.Year Buy Report</h2>
-    <hr class="whiteLine" style="margin-bottom:10px" />
+    <h2 class="whiteText text-center">@ViewBag.Year Buy Report</h2>
+    <hr class="whiteLine" />
     <div class="row">
         <!--Data items.-->
         <div class="col-md-12">
             <div class="whiteCard text-center">
                 <div class="row">
                     <div class="col-md-3">
-                        <h3 style="margin-bottom:0px; padding-bottom:0px">Total Spent</h3>
-                        <h1 style="margin-top:0px; padding-top:0px">$@Model.TotalSpent</h1>
+                        <h3 class="clearBottom">Total Spent</h3>
+                        <h1 class="clearTop">$@Model.TotalSpent</h1>
                     </div>
                     <div class="col-md-3">
-                        <h3 style="margin-bottom:0px; padding-bottom:0px">Total Games Bought</h3>
-                        <h1 style="margin-top:0px; padding-top:0px">@Model.TotalGames</h1>
+                        <h3 class="clearBottom">Total Games Bought</h3>
+                        <h1 class="clearTop">@Model.TotalGames</h1>
                     </div>
                     <div class="col-md-3">
-                        <h3 style="margin-bottom:0px; padding-bottom:0px">Average Spent/Game</h3>
-                        <h1 style="margin-top:0px; padding-top:0px">$@Model.AverageSpend</h1>
+                        <h3 class="clearBottom">Average Spent/Game</h3>
+                        <h1 class="clearTop">$@Model.AverageSpend</h1>
                     </div>
                     <div class="col-md-3">
-                        <h3 style="margin-bottom:0px; padding-bottom:0px">Physical/Digital</h3>
-                        <h1 style="margin-top:0px; padding-top:0px">@Model.TotalPhysical - @Model.TotalDigital</h1>
+                        <h3 class="clearBottom">Physical/Digital</h3>
+                        <h1 class="clearTop">@Model.TotalPhysical - @Model.TotalDigital</h1>
                     </div>
                 </div>
             </div>
@@ -81,34 +81,36 @@ else
         <div class="col-md-8">
             <div class="whiteCard">
                 <!--Canvas used to display the chart.-->
-                <canvas id="costBarGraph" width="700" height="275" style="padding:10px"></canvas>
+                <canvas id="costBarGraph" width="700" height="275"></canvas>
             </div>
             <div class="col-md-8">
                 <div class="whiteCard">
                     <!--Canvas used to display the chart.-->
-                    <canvas id="consolePie" height="350" style="width:100%;max-width:600px;padding-bottom:15px"></canvas>
+                    <canvas id="consolePie" height="350" style="width:100%;max-width:600px;"></canvas>
+                    <br />
                 </div>
             </div>
 
             <!--Price Range Table.-->
             <div class="col-md-4">
-                <div class="whiteCard" style="padding:5px; font-size:16px; line-height:14px">
+                <div class="whiteCard paddedBox">
                     <h3 class="text-center">Price Range Analysis</h3>
                     <hr class="greenLine" />
                     <br />
-                    <div class="col-md-6">
-                        @for (int i = 0; i < 10; i++)
-                        {
-                            <p class="text-right"><b>@Model.PriceLabels[i]</b></p>
-                        }
+                    <div class="row">
+                        <div class="col-md-6">
+                            @for (int i = 0; i < 10; i++)
+                            {
+                                <p class="text-right"><b>@Model.PriceLabels[i]</b></p>
+                            }
+                        </div>
+                        <div class="col-md-6">
+                            @for (int i = 0; i < 10; i++)
+                            {
+                                <p class="text-left">@Model.TotalByPriceRange[i]</p>
+                            }
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        @for (int i = 0; i < 10; i++)
-                        {
-                            <p class="text-left">@Model.TotalByPriceRange[i]</p>
-                        }
-                    </div>
-                    <p style="color:#f7f7f7; margin:0px; padding:0px">a</p>
                 </div>
             </div>
         </div>
@@ -116,7 +118,7 @@ else
         <!--Monthly data.-->
         <div class="col-md-4">
             <div class="panel panel-default whiteCard">
-                <div class="panel-heading text-center" style="line-height:.8">
+                <div class="panel-heading text-center">
                     <h3 style="margin:0px;">Physical/Digital by Month</h3>
                 </div>
                 <div class="panel-body">
@@ -156,13 +158,11 @@ else
         <!--Display game details.-->
         <!--Game list display.-->
         <div class="col-md-12">
-            <div class="panel panel-default whiteCard" style="margin-top:10px;">
-                <div class="panel-heading text-center" style="line-height:.8;">
+            <div class="panel panel-default whiteCard">
+                <div class="panel-heading text-center">
                     <h3 style="margin:0px;">Games List</h3>
                 </div>
-
                 <div class="panel-body">
-
                     <div class="text-center" id="searchType" style="margin: 0 auto">
                         <form name="type_Form" id="type_Form" action="">
                             <input data-val="true" id="Year" name="Year" type="hidden" value=@ViewBag.Year />
@@ -195,7 +195,7 @@ else
 
                     <!-- Type table setup. -->
                     <div id="typeTable" hidden>
-                        <h3 id="tableTitle" style="text-align:center; color:#45c687"></h3>
+                        <h3 id="tableTitle text-center" style="color:#45c687"></h3>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -208,7 +208,6 @@ else
                             </thead>
                             <tbody id="displayType"></tbody>
                         </table>
-
                         <!--Button to reset type search. -->
                         <input id="resetSearch" class="btn customButton" type="button" value="New  Type Search" onclick="ShowInput();" />
                     </div>

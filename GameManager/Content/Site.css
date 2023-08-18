@@ -84,3 +84,20 @@ textarea {
     background-color: white;
     height: .5px;
 }
+
+.clearBottom{
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+.clearTop{
+    margin-top: 0px;
+    padding-top: 0px;
+}
+
+.paddedBox {
+    padding: 5px;
+    line-height: 14px;
+}
+#costBarGraph {
+    padding:10px;
+}
