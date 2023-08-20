@@ -183,6 +183,7 @@
     <Compile Include="Models\GameUser.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ViewModels\AcrossYearsGameData.cs" />
     <Compile Include="Models\ViewModels\BuyData.cs" />
     <Compile Include="Models\ViewModels\PlayData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
