@@ -421,6 +421,9 @@ namespace GameManager.Controllers
                 SystemCounts = systemInfo.Select(c => c.Count()).ToArray()
             };
 
+            // Make selection list for systems currently bought for a drop down.
+            ViewBag.SelectSystemName = new SelectList(gamesListOfYear.Select(g => g.SystemName).Distinct());
+
             return View(playData);
         }
 
@@ -432,141 +435,69 @@ namespace GameManager.Controllers
         public ActionResult AcrossYearsAnalysis()
         {
             var option = (Request.QueryString["option"]);
-            // Check for current option choice.
-            if (option == "Buy" || option == "Play")
+            var gamesList = GetUserGamesList(User.Identity.GetUserId());
+
+            // Data that will be diplayed. It will change a little depending on option selected.
+            AcrossYearsGameData acrossYearsGameData;
+
+            if (option == "Buy")
             {
+                // Get user data organized by year.
+                var byYearGameData = gamesList.Where(c => c.DateOfPurchase != null).GroupBy(c => c.DateOfPurchase.Value.Year);
 
-                var gamesList = GetUserGamesList(User.Identity.GetUserId());
-
-                // Variable for webpage.
-                List<int> yearsList = new List<int>();
-                List<string> variableTitles = new List<string>();
-                List<List<string>> variableValues = new List<List<string>>();
-                List<List<string>> systemTitles = new List<List<string>>();
-                List<List<int>> systemValues = new List<List<int>>();
-
-
-                // Setup Items based on if buy or play option.
-                if (option == "Buy")
+                // Check if there are bought games.
+                if (byYearGameData.Count() <= 0)
                 {
-                    //Check if there are bought games.
-                    if (gamesList.Where(g => g.DateOfPurchase != null).FirstOrDefault() == null)
-                    {
-                        ViewBag.ErrorMessage = "You don't have any bought games.";
-                        return View();
-                    }
-
-                    // Setup titles for variables.
-                    variableTitles = new List<string> { "Total Spent", "Total Bought", "Average Spent/Game", "Physical/Digital" };
-
-                    // Setup data.
-                    var data = gamesList.Where(g => g.DateOfPurchase != null && g.Price != null).GroupBy(g => g.DateOfPurchase.Value.Year).Select(g => new
-                    {
-                        g.Key,
-                        totalSpent = g.Sum(g2 => g2.Price),
-                        totalBought = g.Count(),
-                        avg = Math.Round((decimal)g.Sum(g2 => g2.Price) / g.Count()),
-                        totalPhysical = g.Count(g2 => g2.Physical == true)
-                    });
-
-                    foreach (var x in data)
-                    {
-                        yearsList.Add(x.Key);
-
-                        var avg = (int)Math.Round((decimal)(x.totalSpent / x.totalBought));
-                        var digital = x.totalBought - x.totalPhysical;
-
-                        variableValues.Add(new List<string> {
-                            "$"+x.totalSpent,
-                            x.totalBought.ToString(),
-                            "$"+ avg,
-                            x.totalPhysical+"-"+ digital});
-                    };
-
-                    // Setup for system Info.
-                    var systemInfo = gamesList.Where(g => g.DateOfPurchase != null).GroupBy(g => g.DateOfPurchase.Value.Year).Select(g => new { g.Key, SystemData = g.GroupBy(g2 => g2.SystemName).Select(g3 => new { g3.Key, total = g3.Count() }) }).Select(x => x.SystemData).ToList();
-
-                    foreach (var x in systemInfo)
-                    {
-                        List<string> sTitles = new List<string>();
-                        List<int> sValue = new List<int>();
-                        foreach (var y in x)
-                        {
-                            sTitles.Add(y.Key);
-                            sValue.Add(y.total);
-                        }
-                        systemTitles.Add(sTitles);
-                        systemValues.Add(sValue);
-                    };
-
-                }
-                else
-                {
-                    //Check if there are bought games.
-                    if (gamesList.Where(g => g.DatePlayed != null).FirstOrDefault() == null)
-                    {
-                        ViewBag.ErrorMessage = "You don't have any played games.";
-                        return View();
-                    }
-
-                    // Setup titles for variables.
-                    variableTitles = new List<string> { "Total Played", "Total Borrowed", " Total Replayed", "Physical/Digital" };
-
-                    // Setup data.
-                    var data = gamesList.Where(g => g.DatePlayed != null).GroupBy(g => g.DatePlayed.Value.Year).Select(g => new
-                    {
-                        g.Key,
-                        totalPlayed = g.Count(),
-                        totalBorrowed = g.Count(g2 => g2.Borrowed == true),
-                        totalReplayed = g.Count(g2 => g2.Replayed == true),
-                        totalPhysical = g.Count(g2 => g2.Physical == true)
-                    });
-
-                    foreach (var x in data)
-                    {
-                        yearsList.Add(x.Key);
-
-                        var digital = x.totalPlayed - x.totalPhysical;
-
-                        variableValues.Add(new List<string> {
-                            x.totalPlayed.ToString(),
-                            x.totalBorrowed.ToString(),
-                            x.totalReplayed.ToString(),
-                            x.totalPhysical+"-"+ digital});
-
-                    }
-
-                    // Setup for system Info.
-                    var systemInfo = gamesList.Where(g => g.DatePlayed != null).GroupBy(g => g.DatePlayed.Value.Year).Select(g => new { g.Key, SystemData = g.GroupBy(g2 => g2.SystemName).Select(g3 => new { g3.Key, total = g3.Count() }) }).Select(x => x.SystemData).ToList();
-
-                    foreach (var x in systemInfo)
-                    {
-                        List<string> sTitles = new List<string>();
-                        List<int> sValue = new List<int>();
-                        foreach (var y in x)
-                        {
-                            sTitles.Add(y.Key);
-                            sValue.Add(y.total);
-                        }
-                        systemTitles.Add(sTitles);
-                        systemValues.Add(sValue);
-                    };
+                    ViewBag.ErrorMessage = "You don't have any bought games.";
+                    return View();
                 }
 
-                // Setup viewbag variables.
+                var systemInfo = byYearGameData.Select(c => c.GroupBy(c2 => c2.SystemName));
+
+                acrossYearsGameData = new AcrossYearsGameData
+                {
+                    Years = byYearGameData.Select(c => c.Key).ToArray(),
+                    YearlyTotalGames = byYearGameData.Select(c => c.Count()).ToArray(),
+                    YearlyTotalSpent = byYearGameData.Select(c => c.Sum(c2 => c2.Price)).ToArray(),
+                    YearlyAverageSpent = byYearGameData.Select(c => c.Sum(c2 => c2.Price) / c.Count()).ToArray(),
+                    YearlyTotalPhysical = byYearGameData.Select(c => c.Count(c2 => c2.Physical)).ToArray(),
+                    YearlyTotalDigital = byYearGameData.Select(c => c.Count(c2 => !c2.Physical)).ToArray(),
+                    YearlySystemNames = systemInfo.Select(c => c.Select(c2 => c2.Key).ToList()).ToList(),
+                    YearlySystemCounts = systemInfo.Select(c => c.Select(c2 => c2.Count()).ToList()).ToList()
+                };
                 ViewBag.Option = option;
-                ViewBag.YearsList = yearsList;
-                ViewBag.VariableTitles = variableTitles;
-                ViewBag.VariableValues = variableValues;
-                ViewBag.SystemTitles = systemTitles;
-                ViewBag.SystemValues = systemValues;
+                return View(acrossYearsGameData);
             }
+            else if (option == "Play")
+            {
+                // Get user data organized by year.
+                var byYearGameData = gamesList.Where(c => c.DatePlayed != null).GroupBy(c => c.DatePlayed.Value.Year);
 
+                // Check if there are played games.
+                if (byYearGameData.Count() <= 0)
+                {
+                    ViewBag.ErrorMessage = "You don't have any played games.";
+                    return View();
+                }
 
+                var systemInfo = byYearGameData.Select(c => c.GroupBy(c2 => c2.SystemName));
+
+                acrossYearsGameData = new AcrossYearsGameData
+                {
+                    Years = byYearGameData.Select(c => c.Key).ToArray(),
+                    YearlyTotalGames = byYearGameData.Select(c => c.Count()).ToArray(),
+                    YearlyTotalBorrowed = byYearGameData.Select(c => c.Count(c2 => c2.Borrowed)).ToArray(),
+                    YearlyTotalReplayed = byYearGameData.Select(c => c.Count(c2 => c2.Replayed)).ToArray(),
+                    YearlyTotalPhysical = byYearGameData.Select(c => c.Count(c2 => c2.Physical)).ToArray(),
+                    YearlyTotalDigital = byYearGameData.Select(c => c.Count(c2 => !c2.Physical)).ToArray(),
+                    YearlySystemNames = systemInfo.Select(c => c.Select(c2 => c2.Key).ToList()).ToList(),
+                    YearlySystemCounts = systemInfo.Select(c => c.Select(c2 => c2.Count()).ToList()).ToList()
+                };
+                ViewBag.Option = option;
+                return View(acrossYearsGameData);
+            }
             return View();
         }
-
-
 
         /// <summary>
         /// Get a filtered games list.

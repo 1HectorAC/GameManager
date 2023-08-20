@@ -1,4 +1,4 @@
-﻿
+﻿@model GameManager.Models.ViewModels.AcrossYearsGameData
 @{
     ViewBag.Title = "AcrossYearsAnalysis";
 }
@@ -10,7 +10,6 @@
         <div class="col-md-6 col-md-offset-3 whiteCard text-center" style="padding: 10px; margin-top:10px">
             <h2>Across Years Report</h2>
             <hr class="greenLine" />
-
 
             <p>Select a type.</p>
             <form action="AcrossYearsAnalysis" method="get">
@@ -41,50 +40,69 @@
             </form>
         </div>
     </div>
-
 }
 else
 {
-    <h2 class="whiteText" style="text-align:center">Across Years Report (@ViewBag.Option)</h2>
-    <hr class="whiteLine" style="margin-bottom:10px" />
-    <div class="row">
-        @for (int i = 0; i < @ViewBag.YearsList.Count; i++)
+    <h2 class="whiteText text-center">Across Years Report (@ViewBag.Option)</h2>
+    <hr class="whiteLine" />
+    <div class="row text-center">
+        @for (int i = 0; i < Model.Years.Count(); i++)
         {
             <div class="col-md-12">
-                <div class="col-md-2 text-center">
+                <div class="col-md-2">
                     <br />
-                    <h1 class="whiteText">@ViewBag.YearsList[i]</h1>
-
+                    <h1 class="whiteText">@Model.Years[i]</h1>
                 </div>
-                <div class="col-md-10 ">
-                    <div class="col-md-12">
-                        <div class="whiteCard text-center">
-                            @for (int j = 0; j < @ViewBag.VariableTitles.Count; j++)
-                            {
-                                <div class="col-md-3">
-                                    <h4>@ViewBag.VariableTitles[j]</h4>
-                                    <h2>@ViewBag.VariableValues[i][j]</h2>
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="whiteCard">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h4>Total Games</h4>
+                                        <h2>@Model.YearlyTotalGames[i]</h2>
+                                    </div>
+                                    @if (ViewBag.Option == "Buy")
+                                    {
+                                        <div class="col-md-3">
+                                            <h4>Total Spent</h4>
+                                            <h2>@Model.YearlyTotalSpent[i]</h2>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h4>Average Spend/Game</h4>
+                                            <h2>@Model.YearlyAverageSpent[i]</h2>
+                                        </div>
+                                    }
+                                    else if (ViewBag.Option == "Play")
+                                    {
+                                        <div class="col-md-3">
+                                            <h4>Total Borrowed</h4>
+                                            <h2>@Model.YearlyTotalBorrowed[i]</h2>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <h4>Total Replayed</h4>
+                                            <h2>@Model.YearlyTotalReplayed[i]</h2>
+                                        </div>
+                                    }
+                                    <div class="col-md-3">
+                                        <h4>Physical-Digital</h4>
+                                        <h2>@Model.YearlyTotalPhysical[i]-@Model.YearlyTotalDigital[i]</h2>
+                                    </div>
                                 </div>
-                            }
-                            <p style="color:#f7f7f7; margin:0px; padding:0px">a</p>
-                        </div>
-                    </div>
-                    @for(int k = 0; k < ViewBag.SystemTitles[i].Count; k++)
-                    {
-                        <div class="col-md-2">
-                            <div class="whiteCard text-center" style="padding:1px">
-                                <h4>@ViewBag.SystemTitles[i][k]</h4>
-                                <h2>@ViewBag.SystemValues[i][k]</h2>
                             </div>
                         </div>
-                    }
-                    
+                        @for (int k = 0; k < Model.YearlySystemNames[i].Count; k++)
+                        {
+                            <div class="col-md-2">
+                                <div class="whiteCard text-center" style="padding:1px">
+                                    <h4>@Model.YearlySystemNames[i][k]</h4>
+                                    <h2>@Model.YearlySystemCounts[i][k]</h2>
+                                </div>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
-
         }
-
-
     </div>
-
 }
